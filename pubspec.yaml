@@ -1,6 +1,6 @@
 name: info_popup
 description: The simple way to show the user some information on your selected widget.
-version: 1.0.4
+version: 1.0.5
 repository: https://github.com/salihcanbinboga/info_popup
 
 environment:
