@@ -165,7 +165,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   }
 
   /// Returns true if the layout is mounted.
-  bool get _isLayoutDone => infoPopupBodySize != null;
+  bool get _isLayoutDone => _infoPopupBodySize != null;
 
   /// Gets the indicator top position.
   double get _getIndicatorTopPosition {

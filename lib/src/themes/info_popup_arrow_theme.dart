@@ -2,7 +2,6 @@ import 'package:flutter/material.dart' show Color, Colors, Size;
 import 'package:info_popup/src/constants/popup_constants.dart';
 import 'package:info_popup/src/enums/arrow_direction.dart';
 
-
 /// [InfoPopupArrowTheme] is used to customize the arrow of the popup.
 class InfoPopupArrowTheme {
   /// [InfoPopupArrowTheme] is creates a [InfoPopupArrowTheme] constructor.
