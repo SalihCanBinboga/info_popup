@@ -36,13 +36,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -55,25 +48,18 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_lints:
-    dependency: "direct dev"
-    description:
-      name: flutter_lints
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
-  lints:
-    dependency: transitive
+  info_popup:
+    dependency: "direct main"
     description:
-      name: lints
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   matcher:
     dependency: transitive
     description:
@@ -158,3 +144,4 @@ packages:
     version: "2.1.2"
 sdks:
   dart: ">=2.18.0 <3.0.0"
+  flutter: ">=1.17.0"
