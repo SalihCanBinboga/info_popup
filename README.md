@@ -1,4 +1,4 @@
-# Info Popup ([pub.dev](http://https://pub.dev/packages/info_popup "pub.dev"))
+# Info Popup ([pub.dev](http://pub.dev/packages/info_popup "pub.dev"))
 
 The simple way to show the user some information on your selected widget.
 
