@@ -1,3 +1,7 @@
+## 1.0.10
+
+- doc: update planned task to README.md
+ 
 ## 1.0.9
 
 - doc: add planned task to README.md

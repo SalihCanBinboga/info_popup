@@ -11,8 +11,8 @@ The simple way to show the user some information on your selected widget.
 
 ## Planned
 
-- [ ] Automatic arrow direction calculation feature
-- [ ] Ability to give gap according to the arrow direction
+- &#9744; Automatic arrow direction calculation feature
+- &#9744; Ability to give gap according to the arrow direction
 
 
 ## Getting started
