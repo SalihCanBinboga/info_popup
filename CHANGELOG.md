@@ -1,3 +1,7 @@
+## 1.0.7
+
+- doc: GIF speed updated
+
 ## 1.0.6
 
 - test: Added some simple widget tests
