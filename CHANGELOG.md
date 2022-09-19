@@ -1,3 +1,8 @@
+## 1.0.8
+
+- doc: GIF size reduced
+- doc: README.md updated
+ 
 ## 1.0.7
 
 - doc: GIF speed updated
