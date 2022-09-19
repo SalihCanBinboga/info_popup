@@ -9,6 +9,12 @@ The simple way to show the user some information on your selected widget.
 
 ![Alt Text](assets/readme/example_presentation.gif)
 
+## Planned
+
+- [ ] Automatic arrow direction calculation feature
+- [ ] Ability to give gap according to the arrow direction
+
+
 ## Getting started
 
 ### Use this package as a Library
