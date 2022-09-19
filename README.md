@@ -11,7 +11,7 @@ The simple way to show the user some information on your selected widget.
 
 ## Planned
 
-- :white_large_square Automatic arrow direction calculation feature
+- :white_large_square: Automatic arrow direction calculation feature
 - &#9744; Ability to give gap according to the arrow direction
 
 
