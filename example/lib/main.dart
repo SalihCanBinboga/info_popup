@@ -33,14 +33,21 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            InfoPopupWidget(
-              onControllerCreated: (InfoPopupController controller) {
-                controller.show();
+            GestureDetector(
+              onTap: () {
+                if (infoPopupTextController != null) {
+                  infoPopupTextController!.show();
+                }
               },
-              arrowTheme: const InfoPopupArrowTheme(
-                  arrowDirection: ArrowDirection.down, color: Colors.pink),
-              infoText: 'This is a popup',
-              child: const Text('Info Popup Info Text Example'),
+              child: InfoPopupWidget(
+                onControllerCreated: (InfoPopupController controller) {
+                  controller.show();
+                },
+                arrowTheme: const InfoPopupArrowTheme(
+                    arrowDirection: ArrowDirection.down, color: Colors.pink),
+                infoText: 'This is a popup',
+                child: const Text('Info Popup Info Text Example'),
+              ),
             ),
             const SizedBox(height: 30),
             GestureDetector(
