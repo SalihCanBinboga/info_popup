@@ -1,4 +1,8 @@
-## 1.0.10
+## 1.2.0
+
+- feature: Added custom indicator painter support
+
+## 1.1.0
 
 - feature: Added arrow gap support according to the arrow direction
 - doc: Updated example project

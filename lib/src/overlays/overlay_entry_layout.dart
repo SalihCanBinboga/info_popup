@@ -78,10 +78,11 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
               top: _getIndicatorTopPosition,
               child: CustomPaint(
                 size: widget.arrowTheme.arrowSize,
-                painter: ArrowIndicatorPainter(
-                  arrowDirection: widget.arrowTheme.arrowDirection,
-                  arrowColor: widget.arrowTheme.color,
-                ),
+                painter: widget.arrowTheme.arrowPainter ??
+                    ArrowIndicatorPainter(
+                      arrowDirection: widget.arrowTheme.arrowDirection,
+                      arrowColor: widget.arrowTheme.color,
+                    ),
               ),
             ),
             Positioned(
