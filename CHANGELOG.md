@@ -1,5 +1,10 @@
 ## 1.0.10
 
+- feature: Added arrow gap support according to the arrow direction
+- doc: Updated example project
+
+## 1.0.10
+
 - doc: update planned task to README.md
  
 ## 1.0.9
