@@ -84,7 +84,6 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                 ),
               ),
             ),
-            // popup content
             Positioned(
               left: _getDxHolderCenter - infoPopupBodySize.width / 2,
               top: _getInfoTextContainerTopPosition,
@@ -169,13 +168,16 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
   /// Gets the indicator top position.
   double get _getIndicatorTopPosition {
+    final double arrowGap = widget.arrowTheme.arrowGap;
     switch (widget.arrowTheme.arrowDirection) {
       case ArrowDirection.up:
         return widget.infoPopupTargetOffset.dy +
-            widget.arrowTheme.arrowSize.height / 2;
+            widget.arrowTheme.arrowSize.height / 2 +
+            arrowGap;
       case ArrowDirection.down:
         return widget.infoPopupTargetOffset.dy -
-            widget.infoPopupTargetRenderBox.height;
+            widget.infoPopupTargetRenderBox.height -
+            arrowGap;
     }
   }
 
@@ -185,13 +187,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
       case ArrowDirection.up:
         return _getIndicatorTopPosition + widget.arrowTheme.arrowSize.height;
       case ArrowDirection.down:
-        if (widget.infoWidget != null) {
-          return _getIndicatorTopPosition - infoPopupBodySize.height;
-        } else {
-          return widget.infoPopupTargetOffset.dy -
-              widget.infoPopupTargetRenderBox.height -
-              infoPopupBodySize.height;
-        }
+        return _getIndicatorTopPosition - infoPopupBodySize.height;
     }
   }
 
@@ -203,9 +199,16 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
   /// Gets the [widget.infoWidget] max height.
   double get _getContainerMaxHeight {
-    return context.screenHeight -
-        widget.infoPopupTargetRenderBox.top -
-        context.mediaQuery.padding.bottom -
-        16;
+    const int padding = 16;
+    final double screenHeight = context.screenHeight;
+    final double bottomPadding = context.mediaQuery.padding.bottom;
+    final double targetWidgetTopPosition = widget.infoPopupTargetRenderBox.top;
+    final double arrowGap = widget.arrowTheme.arrowGap;
+
+    return screenHeight -
+        targetWidgetTopPosition -
+        bottomPadding -
+        padding -
+        arrowGap;
   }
 }

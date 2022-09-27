@@ -16,6 +16,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Nullam eget felis eget nunc lobortis mattis aliquam faucibus purus. Aenean et tortor at risus viverra adipiscing at in. Augue eget arcu dictum varius duis at consectetur. Est pellentesque elit ullamcorper dignissim cras. At consectetur lorem donec massa sapien faucibus et. Sit amet venenatis urna cursus eget. Dignissim cras tincidunt lobortis feugiat vivamus. Eget arcu dictum varius duis at. Aenean pharetra magna ac placerat. Enim nec dui nunc mattis enim ut tellus elementum. Laoreet suspendisse interdum consectetur libero. Tellus mauris a diam maecenas sed enim. Tortor posuere ac ut consequat semper viverra nam libero. Tellus molestie nunc non blandit massa.
 ''';
 
+const Key infoPopupArrowGapExampleKey = Key('info_popup_arrow_gap_example');
+const String infoPopupArrowGapExampleText = infoPopupLongTextExampleText;
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -38,6 +41,7 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
   InfoPopupController? infoPopupTextController;
   InfoPopupController? infoPopupCustomWidgetController;
   InfoPopupController? infoPopupLongTextController;
+  InfoPopupController? infoPopupArrowGapController;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +84,8 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                 },
                 arrowTheme: const InfoPopupArrowTheme(
                   color: Colors.black87,
+                  arrowDirection: ArrowDirection.down,
+                  arrowGap: 90,
                 ),
                 infoWidget: Container(
                   width: context.screenWidth * .8,
@@ -113,11 +119,30 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                   infoPopupLongTextController = controller;
                 },
                 arrowTheme: const InfoPopupArrowTheme(
-                  arrowDirection: ArrowDirection.down,
                   color: Colors.pink,
                 ),
                 infoText: infoPopupLongTextExampleText,
                 child: const Text('Info Popup Long Info Text Example'),
+              ),
+            ),
+            const SizedBox(height: 30),
+            GestureDetector(
+              key: infoPopupArrowGapExampleKey,
+              onTap: () {
+                if (infoPopupArrowGapController != null) {
+                  infoPopupArrowGapController!.show();
+                }
+              },
+              child: InfoPopupWidget(
+                onControllerCreated: (InfoPopupController controller) {
+                  infoPopupArrowGapController = controller;
+                },
+                arrowTheme: const InfoPopupArrowTheme(
+                  color: Colors.pink,
+                  arrowGap: 50,
+                ),
+                infoText: infoPopupLongTextExampleText,
+                child: const Text('Info Popup Arrow Gap Example'),
               ),
             ),
           ],
