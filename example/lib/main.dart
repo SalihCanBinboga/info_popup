@@ -85,7 +85,6 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                 arrowTheme: const InfoPopupArrowTheme(
                   color: Colors.black87,
                   arrowDirection: ArrowDirection.down,
-                  arrowGap: 90,
                 ),
                 infoWidget: Container(
                   width: context.screenWidth * .8,
