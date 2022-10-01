@@ -4,5 +4,5 @@ enum ArrowDirection {
   up,
 
   /// The arrow is pointing down.
-  down
+  down,
 }
