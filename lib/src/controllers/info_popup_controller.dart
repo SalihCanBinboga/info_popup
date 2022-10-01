@@ -70,7 +70,7 @@ class InfoPopupController {
           arrowTheme: arrowTheme,
           contentTheme: contentTheme,
           onLayoutMounted: (Size size) {
-            Future<dynamic>.delayed(
+            Future<void>.delayed(
               const Duration(milliseconds: 30),
               () {
                 infoPopupContainerSize = size;
@@ -101,12 +101,14 @@ class InfoPopupController {
   Offset get holderOffset {
     final double dx = holderGlobalRect.left + holderGlobalRect.width / 2.0;
     final double dy = holderGlobalRect.top + holderGlobalRect.height / 2.0;
+
     return Offset(dx, dy);
   }
 
   /// [holderGlobalRect] returns the global rect of the info text.
   Rect get holderGlobalRect {
     final Offset offset = infoPopupTargetRenderBox.localToGlobal(Offset.zero);
+
     return Rect.fromLTWH(
       offset.dx,
       offset.dy,
