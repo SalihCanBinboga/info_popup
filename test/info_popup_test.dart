@@ -60,7 +60,7 @@ void main() {
   );
 
   testWidgets(
-    'MyApp has info popup widget with some gap',
+    'MyApp has info popup widget that has gap',
     (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle(const Duration(seconds: 2));
