@@ -4,6 +4,7 @@ import 'package:info_popup/src/painters/arrow_indicator_painter.dart';
 import 'package:info_popup/src/themes/info_popup_arrow_theme.dart';
 import 'package:info_popup/src/themes/info_popup_content_theme.dart';
 
+import '../enums/arrow_alignment.dart';
 import '../enums/arrow_direction.dart';
 
 /// [InfoPopup] is a widget that shows a popup with a text and an arrow indicator.
@@ -74,7 +75,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
         child: Stack(
           children: <Widget>[
             Positioned(
-              left: _getDxHolderCenter - widget.arrowTheme.arrowSize.width / 2,
+              left: _getArrowLeftPosition,
               top: _getIndicatorTopPosition,
               child: CustomPaint(
                 size: widget.arrowTheme.arrowSize,
@@ -86,7 +87,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
               ),
             ),
             Positioned(
-              left: _getDxHolderCenter - infoPopupBodySize.width / 2,
+              left: _getInfoTextContainerHorizontalPosition,
               top: _getInfoTextContainerTopPosition,
               child: Transform.scale(
                 scale: _isLayoutDone ? 1.0 : 0.0,
@@ -182,6 +183,21 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     }
   }
 
+  double get _getArrowLeftPosition {
+    final double arrowWidth = widget.arrowTheme.arrowSize.width;
+    final double holderStart = widget.infoPopupTargetRenderBox.left;
+    final double holderEnd = widget.infoPopupTargetRenderBox.right;
+
+    switch (widget.arrowTheme.arrowAlignment) {
+      case ArrowAlignment.left:
+        return holderStart - arrowWidth / 2;
+      case ArrowAlignment.right:
+        return holderEnd - arrowWidth / 2;
+      case ArrowAlignment.center:
+        return _getDxHolderCenter - arrowWidth / 2;
+    }
+  }
+
   /// Gets the indicator top position.
   double get _getInfoTextContainerTopPosition {
     switch (widget.arrowTheme.arrowDirection) {
@@ -189,6 +205,21 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
         return _getIndicatorTopPosition + widget.arrowTheme.arrowSize.height;
       case ArrowDirection.down:
         return _getIndicatorTopPosition - infoPopupBodySize.height;
+    }
+  }
+
+  double get _getInfoTextContainerHorizontalPosition {
+    final double holderStart = widget.infoPopupTargetRenderBox.left;
+    final double infoTextContainerWidth = infoPopupBodySize.width;
+    final double screenWith = context.screenWidth;
+    final double dXHolderCenter = _getDxHolderCenter - infoPopupBodySize.width / 2;
+
+    if (dXHolderCenter < 0) {
+      return holderStart;
+    } else if (dXHolderCenter + infoTextContainerWidth > screenWith) {
+      return screenWith - infoTextContainerWidth;
+    } else {
+      return dXHolderCenter;
     }
   }
 

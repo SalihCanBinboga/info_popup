@@ -1,3 +1,9 @@
+## 1.3.0
+
+- fix: Content overflow on device with small screen
+- feature: Added arrow alignment option by target
+- 
+
 ## 1.2.0
 
 - feature: Added custom indicator painter support

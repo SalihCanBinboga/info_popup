@@ -42,6 +42,7 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
   InfoPopupController? infoPopupCustomWidgetController;
   InfoPopupController? infoPopupLongTextController;
   InfoPopupController? infoPopupArrowGapController;
+  InfoPopupController? infoPopupBottomSheetInsideController;
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +144,56 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                 infoText: infoPopupLongTextExampleText,
                 child: const Text('Info Popup Arrow Gap Example'),
               ),
+            ),
+            const SizedBox(height: 30),
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (_) {
+                    return Container(
+                      color: Colors.white,
+                      height: MediaQuery.of(context).size.height * .5,
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  if (infoPopupBottomSheetInsideController !=
+                                      null) {
+                                    infoPopupBottomSheetInsideController!.show();
+                                  }
+                                },
+                                child: InfoPopupWidget(
+                                  onControllerCreated:
+                                      (InfoPopupController controller) {
+                                    infoPopupBottomSheetInsideController =
+                                        controller;
+                                  },
+                                  infoText: infoPopupLongTextExampleText,
+                                  child: const Icon(
+                                    Icons.info,
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                  'Info Popup Inside Bottom Sheet Example'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              behavior: HitTestBehavior.translucent,
+              child: const Text('Bottom Sheet Inside Example'),
             ),
           ],
         ),

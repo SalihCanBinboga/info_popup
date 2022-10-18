@@ -3,6 +3,7 @@ library info_popup;
 export 'src/constants/popup_constants.dart';
 export 'src/controllers/info_popup_controller.dart';
 export 'src/controllers/info_popup_controller.dart';
+export 'src/enums/arrow_alignment.dart';
 export 'src/enums/arrow_direction.dart';
 export 'src/extensions/context_extensions.dart';
 export 'src/info_popup_widget.dart';
