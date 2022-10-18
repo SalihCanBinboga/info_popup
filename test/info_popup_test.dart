@@ -4,14 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets(
-    'MyApp has 3 text widgets',
+    'MyApp has 4 text widgets',
     (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
       final Finder widgets = find.byType(Text);
 
-      expect(widgets, findsNWidgets(3));
+      expect(widgets, findsNWidgets(4));
     },
   );
 
@@ -54,6 +54,21 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
       final Finder widgets = find.text(infoPopupLongTextExampleText);
+
+      expect(widgets, findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'MyApp has info popup widget that has gap',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      await safeTapByKey(tester, infoPopupArrowGapExampleKey);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      final Finder widgets = find.text(infoPopupArrowGapExampleText);
 
       expect(widgets, findsOneWidget);
     },

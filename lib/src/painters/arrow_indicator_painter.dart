@@ -5,7 +5,7 @@ import 'package:info_popup/src/enums/arrow_direction.dart';
 /// to point specific widget
 class ArrowIndicatorPainter extends CustomPainter {
   /// Creates a [ArrowIndicatorPainter]
-  ArrowIndicatorPainter({
+  const ArrowIndicatorPainter({
     required this.arrowDirection,
     this.arrowColor = Colors.black,
   });
@@ -21,6 +21,7 @@ class ArrowIndicatorPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Path arrowPath = Path();
     final Paint arrowPaint = Paint();
+
     arrowPaint.strokeWidth = 2.0;
     arrowPaint.color = arrowColor;
     arrowPaint.style = PaintingStyle.fill;

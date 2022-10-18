@@ -141,7 +141,7 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                   color: Colors.pink,
                   arrowGap: 50,
                 ),
-                infoText: infoPopupLongTextExampleText,
+                infoText: infoPopupArrowGapExampleText,
                 child: const Text('Info Popup Arrow Gap Example'),
               ),
             ),
