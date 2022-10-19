@@ -125,9 +125,10 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
       contentTheme: widget.contentTheme ?? const InfoPopupContentTheme(),
       onAreaPressed: widget.onAreaPressed,
       onLayoutMounted: widget.onLayoutMounted,
-      contentOffset: widget.contentOffset ?? const Offset(0, 0),
       dismissTriggerBehavior: widget.dismissTriggerBehavior,
       infoPopupDismissed: widget.infoPopupDismissed,
+      contentOffset: widget.contentOffset ?? const Offset(0, 0),
+      indicatorOffset: widget.indicatorOffset ?? const Offset(0, 0),
     );
 
     if (!_isControllerInitialized && widget.onControllerCreated != null) {
