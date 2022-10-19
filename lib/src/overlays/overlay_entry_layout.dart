@@ -12,25 +12,25 @@ class OverlayInfoPopup extends StatefulWidget {
   /// Creates a [InfoPopup] widget.
   const OverlayInfoPopup({
     required this.infoPopupTargetOffset,
-    required this.infoPopupTargetRenderBox,
-    this.infoWidget,
-    this.infoText,
+    required this.targetRenderBox,
     required this.areaBackgroundColor,
     required this.arrowTheme,
     required this.contentTheme,
     required this.onAreaPressed,
     required this.onLayoutMounted,
+    this.customContent,
+    this.infoText,
     super.key,
   });
 
   /// [infoPopupTargetOffset] is the offset of the info popup container.
   final Offset infoPopupTargetOffset;
 
-  /// [infoPopupTargetRenderBox] is the rect of the info popup container.
-  final Rect infoPopupTargetRenderBox;
+  /// [targetRenderBox] is the rect of the info popup container.
+  final Rect targetRenderBox;
 
-  /// The [infoWidget] is the widget that will be custom shown in the popup.
-  final Widget? infoWidget;
+  /// The [customContent] is the widget that will be custom shown in the popup.
+  final Widget? customContent;
 
   /// The [infoText] to show in the popup.
   final String? infoText;
@@ -55,13 +55,15 @@ class OverlayInfoPopup extends StatefulWidget {
 }
 
 class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
-  /// The key of the body.
   final GlobalKey _bodyKey = GlobalKey();
 
   @override
   void initState() {
-    /// Adds a post frame callback to the widget binding.
-    WidgetsBinding.instance.addPostFrameCallback(_getLayoutSize);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        _updateContentLayoutSize();
+      },
+    );
     super.initState();
   }
 
@@ -75,8 +77,8 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
         child: Stack(
           children: <Widget>[
             Positioned(
-              left: _getArrowLeftPosition,
-              top: _getIndicatorTopPosition,
+              left: _indicatorDx,
+              top: _indicatorDy,
               child: CustomPaint(
                 size: widget.arrowTheme.arrowSize,
                 painter: widget.arrowTheme.arrowPainter ??
@@ -86,43 +88,48 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                     ),
               ),
             ),
-            Positioned(
-              left: _getInfoTextContainerHorizontalPosition,
-              top: _getInfoTextContainerTopPosition,
-              child: Transform.scale(
-                scale: _isLayoutDone ? 1.0 : 0.0,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: context.screenWidth * .8,
-                    maxHeight: _getContainerMaxHeight,
-                  ),
-                  child: Container(
-                    key: _bodyKey,
-                    decoration: widget.infoWidget != null
-                        ? null
-                        : BoxDecoration(
-                            color: widget
-                                .contentTheme.infoContainerBackgroundColor,
-                            borderRadius:
-                                widget.contentTheme.contentBorderRadius,
-                            boxShadow: const <BoxShadow>[
-                              BoxShadow(
-                                color: Color(0xFF808080),
-                                blurRadius: 1.0,
-                              ),
-                            ],
-                          ),
-                    padding: widget.infoWidget != null
-                        ? null
-                        : widget.contentTheme.contentPadding,
-                    child: widget.infoWidget ??
-                        SingleChildScrollView(
-                          child: Text(
-                            widget.infoText ?? '',
-                            style: widget.contentTheme.infoTextStyle,
-                            textAlign: widget.contentTheme.infoTextAlign,
-                          ),
-                        ),
+            AnimatedPositioned(
+              left: _contentHorizontalPosition,
+              top: _contentDy,
+              duration: const Duration(milliseconds: 50),
+              curve: Curves.bounceInOut,
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 100),
+                child: Transform.scale(
+                  scale: _isLayoutDone ? 1.0 : 0.0,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: context.screenWidth * .8,
+                      maxHeight: _contentMaxHeight,
+                    ),
+                    child: Container(
+                      key: _bodyKey,
+                      decoration: widget.customContent != null
+                          ? null
+                          : BoxDecoration(
+                              color: widget
+                                  .contentTheme.infoContainerBackgroundColor,
+                              borderRadius:
+                                  widget.contentTheme.contentBorderRadius,
+                              boxShadow: const <BoxShadow>[
+                                BoxShadow(
+                                  color: Color(0xFF808080),
+                                  blurRadius: 1.0,
+                                ),
+                              ],
+                            ),
+                      padding: widget.customContent != null
+                          ? null
+                          : widget.contentTheme.contentPadding,
+                      child: SingleChildScrollView(
+                        child: widget.customContent ??
+                            Text(
+                              widget.infoText ?? '',
+                              style: widget.contentTheme.infoTextStyle,
+                              textAlign: widget.contentTheme.infoTextAlign,
+                            ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -133,8 +140,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     );
   }
 
-  /// Gets the size of the layout.
-  void _getLayoutSize(Duration _) {
+  void _updateContentLayoutSize() {
     Future<dynamic>.microtask(
       () {
         setState(
@@ -144,7 +150,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
             if (renderBox != null) {
               final Size size = renderBox.size;
-              _infoPopupBodySize = size;
+              _contentSize = size;
               widget.onLayoutMounted(size);
             }
           },
@@ -153,23 +159,19 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     );
   }
 
-  /// The size of the body.
-  Size? _infoPopupBodySize;
+  Size? _contentSize;
 
-  /// The size of the info popup.
-  Size get infoPopupBodySize {
-    if (_infoPopupBodySize == null) {
-      return widget.infoPopupTargetRenderBox.size;
+  Size get contentSize {
+    if (_contentSize == null) {
+      return widget.targetRenderBox.size;
     } else {
-      return _infoPopupBodySize!;
+      return _contentSize!;
     }
   }
 
-  /// Returns true if the layout is mounted.
-  bool get _isLayoutDone => _infoPopupBodySize != null;
+  bool get _isLayoutDone => _contentSize != null;
 
-  /// Gets the indicator top position.
-  double get _getIndicatorTopPosition {
+  double get _indicatorDy {
     final double arrowGap = widget.arrowTheme.arrowGap;
     switch (widget.arrowTheme.arrowDirection) {
       case ArrowDirection.up:
@@ -178,69 +180,80 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
             arrowGap;
       case ArrowDirection.down:
         return widget.infoPopupTargetOffset.dy -
-            widget.infoPopupTargetRenderBox.height -
+            widget.targetRenderBox.height -
             arrowGap;
     }
   }
 
-  double get _getArrowLeftPosition {
+  double get _indicatorDx {
     final double arrowWidth = widget.arrowTheme.arrowSize.width;
-    final double holderStart = widget.infoPopupTargetRenderBox.left;
-    final double holderEnd = widget.infoPopupTargetRenderBox.right;
+    final double holderStart = widget.targetRenderBox.left;
+    final double holderEnd = widget.targetRenderBox.right;
 
     switch (widget.arrowTheme.arrowAlignment) {
       case ArrowAlignment.left:
-        return holderStart - arrowWidth / 2;
+        final double xRadius =
+            widget.contentTheme.contentBorderRadius.topLeft.x;
+        return holderStart - arrowWidth / 2 + xRadius;
       case ArrowAlignment.right:
         return holderEnd - arrowWidth / 2;
       case ArrowAlignment.center:
-        return _getDxHolderCenter - arrowWidth / 2;
+        return _dXTargetCenter - arrowWidth / 2;
     }
   }
 
-  /// Gets the indicator top position.
-  double get _getInfoTextContainerTopPosition {
+  double get _contentDy {
     switch (widget.arrowTheme.arrowDirection) {
       case ArrowDirection.up:
-        return _getIndicatorTopPosition + widget.arrowTheme.arrowSize.height;
+        return _indicatorDy + widget.arrowTheme.arrowSize.height;
       case ArrowDirection.down:
-        return _getIndicatorTopPosition - infoPopupBodySize.height;
+        return _indicatorDy - contentSize.height;
     }
   }
 
-  double get _getInfoTextContainerHorizontalPosition {
-    final double holderStart = widget.infoPopupTargetRenderBox.left;
-    final double infoTextContainerWidth = infoPopupBodySize.width;
+  double get _contentHorizontalPosition {
+    const double horizontalGap = 16;
+    final double targetLeft = widget.targetRenderBox.left;
+    final double contentWidth = contentSize.width;
     final double screenWith = context.screenWidth;
-    final double dXHolderCenter = _getDxHolderCenter - infoPopupBodySize.width / 2;
+    final double dXTargetCenter = _dXTargetCenter - contentSize.width / 2;
 
-    if (dXHolderCenter < 0) {
-      return holderStart;
-    } else if (dXHolderCenter + infoTextContainerWidth > screenWith) {
-      return screenWith - infoTextContainerWidth;
+    if (dXTargetCenter < 0) {
+      return targetLeft < horizontalGap ? targetLeft : horizontalGap;
+    } else if (dXTargetCenter + contentWidth > screenWith) {
+      return ((targetLeft + widget.targetRenderBox.width) >
+              (screenWith - horizontalGap))
+          ? targetLeft + widget.targetRenderBox.width - contentWidth
+          : screenWith - contentWidth - horizontalGap;
     } else {
-      return dXHolderCenter;
+      return dXTargetCenter;
     }
   }
 
-  /// Gets the indicator left center position.
-  double get _getDxHolderCenter {
-    return widget.infoPopupTargetRenderBox.left +
-        (widget.infoPopupTargetRenderBox.width / 2.0);
+  double get _dXTargetCenter {
+    return widget.targetRenderBox.left + (widget.targetRenderBox.width / 2.0);
   }
 
-  /// Gets the [widget.infoWidget] max height.
-  double get _getContainerMaxHeight {
+  double get _contentMaxHeight {
     const int padding = 16;
     final double screenHeight = context.screenHeight;
     final double bottomPadding = context.mediaQuery.padding.bottom;
-    final double targetWidgetTopPosition = widget.infoPopupTargetRenderBox.top;
+    final double topPadding = context.mediaQuery.padding.top;
+    final double targetWidgetTopPosition = widget.targetRenderBox.top;
     final double arrowGap = widget.arrowTheme.arrowGap;
 
-    return screenHeight -
-        targetWidgetTopPosition -
-        bottomPadding -
-        padding -
-        arrowGap;
+    switch (widget.arrowTheme.arrowDirection) {
+      case ArrowDirection.up:
+        final double belowSpace = screenHeight -
+            targetWidgetTopPosition -
+            widget.targetRenderBox.height -
+            arrowGap -
+            padding -
+            bottomPadding;
+        return belowSpace;
+      case ArrowDirection.down:
+        final double aboveSpace = targetWidgetTopPosition - topPadding;
+        return aboveSpace;
+    }
   }
 }

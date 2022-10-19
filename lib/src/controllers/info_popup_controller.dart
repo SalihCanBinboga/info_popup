@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:info_popup/src/overlays/overlay_entry_layout.dart';
-import 'package:info_popup/src/themes/info_popup_arrow_theme.dart';
-import 'package:info_popup/src/themes/info_popup_content_theme.dart';
-import 'package:info_popup/src/typedefs/on_area_pressed.dart';
+import 'package:info_popup/info_popup.dart';
 
 /// Popup manager for the InfoPopup widget.
 /// [InfoPopupController] is used to show and dismiss the popup.
@@ -10,22 +7,22 @@ class InfoPopupController {
   /// Creates a [InfoPopupController] widget.
   InfoPopupController({
     required this.context,
-    required this.infoPopupTargetRenderBox,
+    required RenderBox targetRenderBox,
     this.infoPopupDismissed,
     this.infoText,
-    this.infoWidget,
+    this.customContent,
     required this.areaBackgroundColor,
     required this.arrowTheme,
     required this.contentTheme,
     this.onAreaPressed,
     this.onLayoutMounted,
-  });
+  }) : _targetRenderBox = targetRenderBox;
 
   /// The context of the widget.
   final BuildContext context;
 
-  /// The [infoPopupTargetRenderBox] is the render box of the info text.
-  final RenderBox infoPopupTargetRenderBox;
+  /// The [targetRenderBox] is the render box of the info text.
+  RenderBox _targetRenderBox;
 
   /// The [infoPopupDismissed] is the callback function when the popup is dismissed.
   final VoidCallback? infoPopupDismissed;
@@ -33,8 +30,8 @@ class InfoPopupController {
   /// The [infoText] to show in the popup.
   final String? infoText;
 
-  /// The [infoWidget] is the widget that will be custom shown in the popup.
-  final Widget? infoWidget;
+  /// The [customContent] is the widget that will be custom shown in the popup.
+  final Widget? customContent;
 
   /// The [areaBackgroundColor] is the background color of the area that
   final Color areaBackgroundColor;
@@ -63,9 +60,9 @@ class InfoPopupController {
       builder: (_) {
         return OverlayInfoPopup(
           infoPopupTargetOffset: holderOffset,
-          infoPopupTargetRenderBox: holderGlobalRect,
+          targetRenderBox: targetGlobalRect,
           infoText: infoText,
-          infoWidget: infoWidget,
+          customContent: customContent,
           areaBackgroundColor: areaBackgroundColor,
           arrowTheme: arrowTheme,
           contentTheme: contentTheme,
@@ -99,21 +96,21 @@ class InfoPopupController {
 
   /// [holderOffset] is the offset of the holder.
   Offset get holderOffset {
-    final double dx = holderGlobalRect.left + holderGlobalRect.width / 2.0;
-    final double dy = holderGlobalRect.top + holderGlobalRect.height / 2.0;
+    final double dx = targetGlobalRect.left + targetGlobalRect.width / 2.0;
+    final double dy = targetGlobalRect.top + targetGlobalRect.height / 2.0;
 
     return Offset(dx, dy);
   }
 
-  /// [holderGlobalRect] returns the global rect of the info text.
-  Rect get holderGlobalRect {
-    final Offset offset = infoPopupTargetRenderBox.localToGlobal(Offset.zero);
+  /// [targetGlobalRect] returns the global rect of the info text.
+  Rect get targetGlobalRect {
+    final Offset offset = _targetRenderBox.localToGlobal(Offset.zero);
 
     return Rect.fromLTWH(
       offset.dx,
       offset.dy,
-      infoPopupTargetRenderBox.size.width,
-      infoPopupTargetRenderBox.size.height,
+      _targetRenderBox.size.width,
+      _targetRenderBox.size.height,
     );
   }
 
@@ -127,5 +124,11 @@ class InfoPopupController {
         infoPopupDismissed!.call();
       }
     }
+  }
+
+  /// [updateInfoPopupTargetRenderBox] is used to update the render box of the info text.
+  void updateInfoPopupTargetRenderBox(RenderBox renderBox) {
+    _targetRenderBox = renderBox;
+    _infoPopupOverlayEntry?.markNeedsBuild();
   }
 }

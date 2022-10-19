@@ -1,8 +1,17 @@
+## 1.4.0
+
+- refactor: Improved calculating above and below the target widget remaining area
+- refactor: [onControllerCreated] now optional
+- refactor: [infoText] & [infoWidget] now deprecated, use [customTitle] & [customContent] instead
+- feature: Add popup trigger mode [PopupTriggerBehavior] (default: [PopupTriggerBehavior.onTap])
+- refactor: Some code refactoring and name changes
+- feature: Calculate dynamic popup position based on the target widget position
+- feature: Add content SafeArea to indicator
+
 ## 1.3.0
 
 - fix: Content overflow on device with small screen
 - feature: Added arrow alignment option by target
-- 
 
 ## 1.2.0
 
