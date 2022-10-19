@@ -1,9 +1,20 @@
+## 2.0.0
+
+- feature: Added dismiss behavior to info popup
+- feature: Support for inside list items!
+- feature: Added `contentOffset` prop
+- refactor: Some argument names have been changed (major version bump)
+- fix: Fixed a bug where the popup would not be dismissed when the user tapped outside of it
+- fix: Bottom sheet offset is now calculated correctly in web
+- deprecated: Removed `infoText` & `infoWidget` props
+- deprecated: Removed `arrowGap` & `arrowAlignment` props
+ 
 ## 1.4.0
 
 - refactor: Improved calculating above and below the target widget remaining area
-- refactor: [onControllerCreated] now optional
-- refactor: [infoText] & [infoWidget] now deprecated, use [customTitle] & [customContent] instead
-- feature: Add popup trigger mode [PopupTriggerBehavior] (default: [PopupTriggerBehavior.onTap])
+- refactor: `onControllerCreated` now optional
+- refactor: `infoText` & `infoWidget` now deprecated, use `customTitle` & `customContent` instead
+- feature: Add popup trigger mode `PopupTriggerBehavior` (default: `PopupTriggerBehavior.onTap`)
 - refactor: Some code refactoring and name changes
 - feature: Calculate dynamic popup position based on the target widget position
 - feature: Add content SafeArea to indicator

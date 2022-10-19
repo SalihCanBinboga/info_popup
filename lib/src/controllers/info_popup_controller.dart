@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:info_popup/info_popup.dart';
 
+import '../painters/arrow_indicator_painter.dart';
+
+part '../overlays/overlay_entry_layout.dart';
+
 /// Popup manager for the InfoPopup widget.
 /// [InfoPopupController] is used to show and dismiss the popup.
 class InfoPopupController {
@@ -8,27 +12,33 @@ class InfoPopupController {
   InfoPopupController({
     required this.context,
     required RenderBox targetRenderBox,
-    this.infoPopupDismissed,
-    this.infoText,
-    this.customContent,
     required this.areaBackgroundColor,
     required this.arrowTheme,
     required this.contentTheme,
+    required this.layerLink,
+    required this.dismissTriggerBehavior,
+    this.infoPopupDismissed,
+    this.contentTitle,
+    this.customContent,
     this.onAreaPressed,
     this.onLayoutMounted,
+    this.contentOffset = Offset.zero,
   }) : _targetRenderBox = targetRenderBox;
+
+  /// The [layerLink] is the layer link of the popup.
+  final LayerLink layerLink;
 
   /// The context of the widget.
   final BuildContext context;
 
-  /// The [targetRenderBox] is the render box of the info text.
+  /// The [_targetRenderBox] is the render box of the info text.
   RenderBox _targetRenderBox;
 
   /// The [infoPopupDismissed] is the callback function when the popup is dismissed.
   final VoidCallback? infoPopupDismissed;
 
-  /// The [infoText] to show in the popup.
-  final String? infoText;
+  /// The [contentTitle] to show in the popup.
+  final String? contentTitle;
 
   /// The [customContent] is the widget that will be custom shown in the popup.
   final Widget? customContent;
@@ -48,6 +58,12 @@ class InfoPopupController {
   /// [onLayoutMounted] Called when the info layout is mounted.
   final Function(Size size)? onLayoutMounted;
 
+  /// The [contentOffset] is the offset of the content.
+  final Offset contentOffset;
+
+  /// The [dismissTriggerBehavior] is the dismissing behavior of the popup.
+  final PopupDismissTriggerBehavior dismissTriggerBehavior;
+
   /// The [_infoPopupOverlayEntry] is the overlay entry of the popup.
   OverlayEntry? _infoPopupOverlayEntry;
 
@@ -59,13 +75,14 @@ class InfoPopupController {
     _infoPopupOverlayEntry = OverlayEntry(
       builder: (_) {
         return OverlayInfoPopup(
-          infoPopupTargetOffset: holderOffset,
-          targetRenderBox: targetGlobalRect,
-          infoText: infoText,
+          targetRenderBox: _targetRenderBox,
+          contentTitle: contentTitle,
+          layerLink: layerLink,
           customContent: customContent,
           areaBackgroundColor: areaBackgroundColor,
-          arrowTheme: arrowTheme,
+          indicatorTheme: arrowTheme,
           contentTheme: contentTheme,
+          contentOffset: contentOffset,
           onLayoutMounted: (Size size) {
             Future<void>.delayed(
               const Duration(milliseconds: 30),
@@ -87,6 +104,7 @@ class InfoPopupController {
 
             dismissInfoPopup();
           },
+          dismissTriggerBehavior: dismissTriggerBehavior,
         );
       },
     );
@@ -94,25 +112,8 @@ class InfoPopupController {
     Overlay.of(context)!.insert(_infoPopupOverlayEntry!);
   }
 
-  /// [holderOffset] is the offset of the holder.
-  Offset get holderOffset {
-    final double dx = targetGlobalRect.left + targetGlobalRect.width / 2.0;
-    final double dy = targetGlobalRect.top + targetGlobalRect.height / 2.0;
-
-    return Offset(dx, dy);
-  }
-
-  /// [targetGlobalRect] returns the global rect of the info text.
-  Rect get targetGlobalRect {
-    final Offset offset = _targetRenderBox.localToGlobal(Offset.zero);
-
-    return Rect.fromLTWH(
-      offset.dx,
-      offset.dy,
-      _targetRenderBox.size.width,
-      _targetRenderBox.size.height,
-    );
-  }
+  /// The [isShowing] method is used to check if the popup is showing.
+  bool get isShowing => _infoPopupOverlayEntry != null;
 
   /// [dismissInfoPopup] is used to dismiss the popup.
   void dismissInfoPopup() {
