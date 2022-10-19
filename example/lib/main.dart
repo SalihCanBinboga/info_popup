@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:info_popup/info_popup.dart';
 
+import 'list_example.dart';
+
 void main() => runApp(const MyApp());
 
 const Key infoPopupTextExampleKey = Key('info_popup_text_example');
@@ -149,12 +151,23 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
               ),
               const SizedBox(height: 30),
               const InfoPopupWidget(
-                arrowTheme: InfoPopupArrowTheme(
-                  color: Colors.pink,
-                  arrowGap: 50,
-                ),
+                contentOffset: Offset(0, 30),
                 contentTitle: infoPopupArrowGapExampleText,
                 child: Text('Info Popup Arrow Gap Example'),
+              ),
+              const SizedBox(height: 30),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push<void>(
+                    MaterialPageRoute<void>(
+                      builder: (_) {
+                        return const ListExample();
+                      },
+                    ),
+                  );
+                },
+                behavior: HitTestBehavior.translucent,
+                child: const Text('List Example'),
               ),
             ],
           ),
