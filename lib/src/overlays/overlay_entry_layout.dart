@@ -89,17 +89,17 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   Offset get _bodyOffset {
     final Size contentSize = _contentSize == null ? Size.zero : _contentSize!;
 
-    Offset offset = Offset.zero;
+    Offset targetCenterOffset = Offset.zero;
 
     switch (widget.indicatorTheme.arrowDirection) {
       case ArrowDirection.up:
-        offset = Offset(
+        targetCenterOffset = Offset(
           _targetWidgetRect.width / 2 - contentSize.width / 2,
           _targetWidgetRect.height + widget.indicatorTheme.arrowSize.height,
         );
         break;
       case ArrowDirection.down:
-        offset = Offset(
+        targetCenterOffset = Offset(
           _targetWidgetRect.width / 2 - contentSize.width / 2,
           -(contentSize.height + widget.indicatorTheme.arrowSize.height),
         );
@@ -107,14 +107,14 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     }
 
     if (widget.layerLink.leader == null) {
-      return offset;
+      return targetCenterOffset;
     }
 
     Offset finalOffset = Offset.zero;
 
     final LayerLink link = widget.layerLink;
     final double targetWidth = _targetWidgetRect.width;
-    final double targetDx = link.leader!.offset.dx;
+    final double targetDx = widget.targetRenderBox.localToGlobal(Offset.zero).dx;
     final double targetRightCorner = targetDx + link.leaderSize!.width;
     final double rightGap = context.screenWidth - targetRightCorner;
     final double leftGap = targetDx;
@@ -123,17 +123,17 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
     if (rightGap < contentSize.width / 2 && leftGap > contentSize.width / 2) {
       finalOffset = Offset(
-        -(contentSize.width - targetWidth) / 2,
+        -(contentSize.width - targetWidth) / 2 + rightGap,
         0,
       );
     } else if (leftGap < contentSize.width / 2) {
       finalOffset = Offset(
-        (contentSize.width - targetWidth) / 2,
+        (contentSize.width - targetWidth) / 2 - leftGap,
         0,
       );
     }
 
-    return offset + finalOffset + widget.contentOffset;
+    return targetCenterOffset + finalOffset + widget.contentOffset;
   }
 
   void _updateContentLayoutSize() {
