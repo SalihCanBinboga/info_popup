@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:info_popup/info_popup.dart';
 
-import 'enums/popup_trigger_behavior.dart';
-
 /// A widget that shows a popup with text.
 class InfoPopupWidget extends StatefulWidget {
   /// Creates a [InfoPopupWidget] widget.
@@ -11,21 +9,18 @@ class InfoPopupWidget extends StatefulWidget {
     required this.child,
     this.onControllerCreated,
     this.infoPopupDismissed,
-    @Deprecated('Use [contentTitle] instead') this.infoText,
     this.contentTitle,
-    @Deprecated('Use [customContent] instead') this.infoWidget,
     this.customContent,
     this.areaBackgroundColor,
     this.arrowTheme,
     this.contentTheme,
     this.onAreaPressed,
     this.onLayoutMounted,
-    this.triggerBehavior = PopupTriggerBehavior.onTap,
+    this.dismissTriggerBehavior = PopupDismissTriggerBehavior.onTapArea,
+    this.contentOffset,
     super.key,
-  })  : assert((infoText == null && contentTitle == null) || infoWidget == null,
-            "You can't use [infoText] & [contentTitle] and [infoWidget] at the same time."),
-        assert(contentTitle == null || infoText == null,
-            "You can't use [contentTitle] and [infoText] at the same time.");
+  }) : assert(customContent == null || contentTitle == null,
+            'You can not use both customContent and contentTitle at the same time.');
 
   /// The [child] of the [InfoPopupWidget].
   final Widget child;
@@ -36,16 +31,8 @@ class InfoPopupWidget extends StatefulWidget {
   /// The [infoPopupDismissed] is the callback function when the popup is dismissed.
   final VoidCallback? infoPopupDismissed;
 
-  /// The [infoText] to show in the popup.
-  @Deprecated('Use [contentTitle] instead')
-  final String? infoText;
-
   /// The [contentTitle] to show in the popup.
   final String? contentTitle;
-
-  /// The [infoWidget] is the widget that will be custom shown in the popup.
-  @Deprecated('Use [customContent] instead')
-  final Widget? infoWidget;
 
   /// The [customContent] is the widget that will be custom shown in the popup.
   final Widget? customContent;
@@ -65,8 +52,11 @@ class InfoPopupWidget extends StatefulWidget {
   /// [onLayoutMounted] Called when the info layout is mounted.
   final Function(Size size)? onLayoutMounted;
 
-  /// The [triggerBehavior] is the showing behavior of the popup.
-  final PopupTriggerBehavior triggerBehavior;
+  /// The [dismissTriggerBehavior] is the showing behavior of the popup.
+  final PopupDismissTriggerBehavior dismissTriggerBehavior;
+
+  /// The [contentOffset] is the offset of the content with indicator.
+  final Offset? contentOffset;
 
   @override
   State<InfoPopupWidget> createState() => _InfoPopupWidgetState();
@@ -76,22 +66,32 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
   final GlobalKey<State<StatefulWidget>> _infoPopupTargetKey = GlobalKey();
   InfoPopupController? _infoPopupController;
   bool _isControllerInitialized = false;
+  final LayerLink _layerLink = LayerLink();
+
+  @override
+  void dispose() {
+    if (_infoPopupController != null && _infoPopupController!.isShowing) {
+      _infoPopupController!.dismissInfoPopup();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     SchedulerBinding.instance.addPostFrameCallback((_) => _updateRenderBox());
     return GestureDetector(
       onTap: () {
-        if (widget.triggerBehavior == PopupTriggerBehavior.onTap) {
-          if (_infoPopupController != null) {
-            _infoPopupController!.show();
-          }
+        if (_infoPopupController != null && !_infoPopupController!.isShowing) {
+          _infoPopupController!.show();
         }
       },
       behavior: HitTestBehavior.translucent,
-      child: Container(
-        key: _infoPopupTargetKey,
-        child: widget.child,
+      child: CompositedTransformTarget(
+        link: _layerLink,
+        child: Container(
+          key: _infoPopupTargetKey,
+          child: widget.child,
+        ),
       ),
     );
   }
@@ -112,15 +112,18 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
     _infoPopupController = _infoPopupController ??= InfoPopupController(
       context: context,
       targetRenderBox: renderBox,
-      infoText: widget.contentTitle ?? widget.infoText,
-      customContent: widget.customContent ?? widget.infoWidget,
+      layerLink: _layerLink,
+      contentTitle: widget.contentTitle,
+      customContent: widget.customContent,
       areaBackgroundColor: widget.areaBackgroundColor ??
           PopupConstants.defaultAreaBackgroundColor,
       arrowTheme: widget.arrowTheme ?? const InfoPopupArrowTheme(),
       contentTheme: widget.contentTheme ?? const InfoPopupContentTheme(),
-      infoPopupDismissed: widget.infoPopupDismissed,
       onAreaPressed: widget.onAreaPressed,
       onLayoutMounted: widget.onLayoutMounted,
+      contentOffset: widget.contentOffset ?? const Offset(0, 0),
+      dismissTriggerBehavior: widget.dismissTriggerBehavior,
+      infoPopupDismissed: widget.infoPopupDismissed,
     );
 
     if (!_isControllerInitialized && widget.onControllerCreated != null) {
