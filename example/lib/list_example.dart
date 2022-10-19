@@ -14,6 +14,7 @@ class ListExample extends StatelessWidget {
             title: Text('Item $index'),
             leading: const InfoPopupWidget(
               contentTitle: 'Lorem ipsum dolor sit amet',
+              dismissTriggerBehavior: PopupDismissTriggerBehavior.onTapContent,
               child: Icon(Icons.info),
             ),
           );
