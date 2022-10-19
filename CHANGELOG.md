@@ -1,3 +1,7 @@
+## 2.1.0
+
+- feature: Added `indicatorOffset` prop to `InfoPopupWidget`
+
 ## 2.0.0
 
 - feature: Added dismiss behavior to info popup

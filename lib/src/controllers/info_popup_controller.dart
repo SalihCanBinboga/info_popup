@@ -23,6 +23,7 @@ class InfoPopupController {
     this.onAreaPressed,
     this.onLayoutMounted,
     this.contentOffset = Offset.zero,
+    this.indicatorOffset = Offset.zero,
   }) : _targetRenderBox = targetRenderBox;
 
   /// The [layerLink] is the layer link of the popup.
@@ -61,6 +62,9 @@ class InfoPopupController {
   /// The [contentOffset] is the offset of the content.
   final Offset contentOffset;
 
+  /// The [indicatorOffset] is the offset of the indicator.
+  final Offset indicatorOffset;
+
   /// The [dismissTriggerBehavior] is the dismissing behavior of the popup.
   final PopupDismissTriggerBehavior dismissTriggerBehavior;
 
@@ -83,6 +87,7 @@ class InfoPopupController {
           indicatorTheme: arrowTheme,
           contentTheme: contentTheme,
           contentOffset: contentOffset,
+          indicatorOffset: indicatorOffset,
           onLayoutMounted: (Size size) {
             Future<void>.delayed(
               const Duration(milliseconds: 30),

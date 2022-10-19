@@ -13,6 +13,7 @@ class OverlayInfoPopup extends StatefulWidget {
     required this.contentTheme,
     required this.onAreaPressed,
     required this.onLayoutMounted,
+    required this.indicatorOffset,
     required this.contentOffset,
     required this.dismissTriggerBehavior,
     super.key,
@@ -48,6 +49,9 @@ class OverlayInfoPopup extends StatefulWidget {
   /// [contentOffset] is the offset of the content.
   final Offset contentOffset;
 
+  /// [indicatorOffset] is the offset of the indicator.
+  final Offset indicatorOffset;
+
   /// [dismissTriggerBehavior] is the behavior of the popup when the popup is pressed.
   final PopupDismissTriggerBehavior dismissTriggerBehavior;
 
@@ -76,13 +80,13 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
               _targetWidgetRect.width / 2 - indicatorWidth / 2,
               _targetWidgetRect.height,
             ) +
-            widget.contentOffset;
+            widget.indicatorOffset;
       case ArrowDirection.down:
         return Offset(
               _targetWidgetRect.width / 2 - indicatorWidth / 2,
               -widget.indicatorTheme.arrowSize.height,
             ) +
-            widget.contentOffset;
+            widget.indicatorOffset;
     }
   }
 

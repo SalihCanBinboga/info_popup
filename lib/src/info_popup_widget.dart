@@ -18,6 +18,7 @@ class InfoPopupWidget extends StatefulWidget {
     this.onLayoutMounted,
     this.dismissTriggerBehavior = PopupDismissTriggerBehavior.onTapArea,
     this.contentOffset,
+    this.indicatorOffset,
     super.key,
   }) : assert(customContent == null || contentTitle == null,
             'You can not use both customContent and contentTitle at the same time.');
@@ -55,8 +56,11 @@ class InfoPopupWidget extends StatefulWidget {
   /// The [dismissTriggerBehavior] is the showing behavior of the popup.
   final PopupDismissTriggerBehavior dismissTriggerBehavior;
 
-  /// The [contentOffset] is the offset of the content with indicator.
+  /// The [contentOffset] is the offset of the content..
   final Offset? contentOffset;
+
+  /// The [indicatorOffset] is the offset of the indicator.
+  final Offset? indicatorOffset;
 
   @override
   State<InfoPopupWidget> createState() => _InfoPopupWidgetState();
