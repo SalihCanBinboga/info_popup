@@ -118,7 +118,8 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
     final LayerLink link = widget.layerLink;
     final double targetWidth = _targetWidgetRect.width;
-    final double targetDx = widget.targetRenderBox.localToGlobal(Offset.zero).dx;
+    final double targetDx =
+        widget.targetRenderBox.localToGlobal(Offset.zero).dx;
     final double targetRightCorner = targetDx + link.leaderSize!.width;
     final double rightGap = context.screenWidth - targetRightCorner;
     final double leftGap = targetDx;
