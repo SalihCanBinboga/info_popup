@@ -1,6 +1,7 @@
 # Info Popup
 
 The simple way to show the user some information on your selected widget.
+You can test now [Info Popup](https://info-popup.web.app/#/ "Info Popup")
 
 ## Features
 
@@ -8,11 +9,6 @@ The simple way to show the user some information on your selected widget.
 - Fully editable content area
 
 ![Alt Text](assets/readme/example_presentation.gif)
-
-## Planned
-
-- &#9744; Automatic arrow direction calculation feature
-- &#9744; Ability to give gap according to the arrow direction
 
 
 ## Getting started
@@ -49,41 +45,41 @@ All you have to do is wrap it in the widget you want to show information with **
 ##### Normal Info Text Using
 ```dart
 InfoPopupWidget(
-  onControllerCreated: (InfoPopupController controller) {
-    controller.show();
-  },
-  arrowTheme: const InfoPopupArrowTheme(
-  arrowDirection: ArrowDirection.down, color: Colors.pink),
-  infoText: 'This is a popup',
-  child: const Text('Info Popup Info Text Example'),
+onControllerCreated: (InfoPopupController controller) {
+controller.show();
+},
+arrowTheme: const InfoPopupArrowTheme(
+arrowDirection: ArrowDirection.down, color: Colors.pink),
+infoText: 'This is a popup',
+child: const Text('Info Popup Info Text Example'),
 ),
 ```
 
 ##### Custom Popup Widget
 ```dart
 InfoPopupWidget(
-    onControllerCreated: (InfoPopupController controller) {
-    controller.show();
-  },
-  arrowTheme: const InfoPopupArrowTheme(
-    color: Colors.black87,
-  ),
-  infoWidget: Container(
-    width: context.screenWidth * .8,
-    height: 100,
-    decoration: BoxDecoration(
-      color: Colors.red,
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: const Center(
-      child: Text(
-        'This is a custom widget',
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-    ),
-  ),
-  child: const Text('Info Popup Custom Widget Example'),
+onControllerCreated: (InfoPopupController controller) {
+controller.show();
+},
+arrowTheme: const InfoPopupArrowTheme(
+color: Colors.black87,
+),
+infoWidget: Container(
+width: context.screenWidth * .8,
+height: 100,
+decoration: BoxDecoration(
+color: Colors.red,
+borderRadius: BorderRadius.circular(10),
+),
+child: const Center(
+child: Text(
+'This is a custom widget',
+style: TextStyle(
+color: Colors.white,
+),
+),
+),
+),
+child: const Text('Info Popup Custom Widget Example'),
 ),
 ```
