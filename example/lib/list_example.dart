@@ -9,6 +9,7 @@ class ListExample extends StatelessWidget {
     return Scaffold(
       body: ListView.builder(
         itemCount: 120,
+        cacheExtent: 10000,
         itemBuilder: (_, int index) {
           return ListTile(
             title: Text('Item $index'),
