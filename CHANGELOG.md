@@ -1,3 +1,8 @@
+## 2.1.2
+
+- doc: Deployed to hosting to test an example project
+- You can test now! [Info Popup](https://info-popup.web.app/#/ "Info Popup")
+ 
 ## 2.1.0
 
 - feature: Added `indicatorOffset` prop to `InfoPopupWidget`
