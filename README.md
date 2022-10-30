@@ -1,6 +1,7 @@
 # Info Popup
 
 The simple way to show the user some information on your selected widget.
+
 You can test now [Info Popup](https://info-popup.web.app/#/ "Info Popup")
 
 ## Features
@@ -44,42 +45,97 @@ All you have to do is wrap it in the widget you want to show information with **
 
 ##### Normal Info Text Using
 ```dart
-InfoPopupWidget(
-onControllerCreated: (InfoPopupController controller) {
-controller.show();
-},
-arrowTheme: const InfoPopupArrowTheme(
-arrowDirection: ArrowDirection.down, color: Colors.pink),
-infoText: 'This is a popup',
-child: const Text('Info Popup Info Text Example'),
-),
+              InfoPopupWidget(
+                contentTitle: 'Info Popup Details',
+                arrowTheme: InfoPopupArrowTheme(
+                  color: Colors.pink,
+                  arrowDirection: ArrowDirection.up,
+                ),
+                contentTheme: InfoPopupContentTheme(
+                  infoContainerBackgroundColor: Colors.black,
+                  infoTextStyle: TextStyle(color: Colors.white),
+                  contentPadding: const EdgeInsets.all(8),
+                  contentBorderRadius: BorderRadius.all(Radius.circular(10)),
+                  infoTextAlign: TextAlign.center,
+                ),
+                dismissTriggerBehavior: PopupDismissTriggerBehavior.onTapArea,
+                areaBackgroundColor: Colors.transparent,
+                indicatorOffset: Offset.zero,
+                contentOffset: Offset.zero,
+                onControllerCreated: (controller) {
+                  print('Info Popup Controller Created');
+                },
+                onAreaPressed: (InfoPopupController controller) {
+                  print('Area Pressed');
+                },
+                infoPopupDismissed: () {
+                  print('Info Popup Dismissed');
+                },
+                onLayoutMounted: (Size size) {
+                  print('Info Popup Layout Mounted');
+                },
+                child: Icon(
+                  Icons.info,
+                  color: Colors.pink,
+                ),
+              ),
 ```
 
 ##### Custom Popup Widget
 ```dart
-InfoPopupWidget(
-onControllerCreated: (InfoPopupController controller) {
-controller.show();
-},
-arrowTheme: const InfoPopupArrowTheme(
-color: Colors.black87,
-),
-infoWidget: Container(
-width: context.screenWidth * .8,
-height: 100,
-decoration: BoxDecoration(
-color: Colors.red,
-borderRadius: BorderRadius.circular(10),
-),
-child: const Center(
-child: Text(
-'This is a custom widget',
-style: TextStyle(
-color: Colors.white,
-),
-),
-),
-),
-child: const Text('Info Popup Custom Widget Example'),
-),
+              InfoPopupWidget(
+                customContent: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: const <Widget>[
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Enter your name',
+                          hintStyle: TextStyle(color: Colors.white),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Center(
+                        child: Text(
+                          'Example of Info Popup inside a Bottom Sheet',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                arrowTheme: const InfoPopupArrowTheme(
+                  color: Colors.pink,
+                  arrowDirection: ArrowDirection.up,
+                ),
+                dismissTriggerBehavior: PopupDismissTriggerBehavior.onTapArea,
+                areaBackgroundColor: Colors.transparent,
+                indicatorOffset: Offset.zero,
+                contentOffset: Offset.zero,
+                onControllerCreated: (controller) {
+                  print('Info Popup Controller Created');
+                },
+                onAreaPressed: (InfoPopupController controller) {
+                  print('Area Pressed');
+                },
+                infoPopupDismissed: () {
+                  print('Info Popup Dismissed');
+                },
+                onLayoutMounted: (Size size) {
+                  print('Info Popup Layout Mounted');
+                },
+                child: Icon(
+                  Icons.info,
+                  color: Colors.pink,
+                ),
+              ),
 ```

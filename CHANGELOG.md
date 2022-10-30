@@ -1,3 +1,7 @@
+## 2.1.3
+
+- doc: Update README.md
+
 ## 2.1.2
 
 - doc: Deployed to hosting to test an example project
