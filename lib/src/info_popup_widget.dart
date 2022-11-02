@@ -19,6 +19,7 @@ class InfoPopupWidget extends StatefulWidget {
     this.dismissTriggerBehavior = PopupDismissTriggerBehavior.onTapArea,
     this.contentOffset,
     this.indicatorOffset,
+    this.contentMaxWidth,
     super.key,
   }) : assert(customContent == null || contentTitle == null,
             'You can not use both customContent and contentTitle at the same time.');
@@ -61,6 +62,11 @@ class InfoPopupWidget extends StatefulWidget {
 
   /// The [indicatorOffset] is the offset of the indicator.
   final Offset? indicatorOffset;
+
+  /// [contentMaxWidth] is the max width of the content that is being showed.
+  /// If the [contentMaxWidth] is null, the max width will be eighty percent
+  /// of the screen.
+  final double? contentMaxWidth;
 
   @override
   State<InfoPopupWidget> createState() => _InfoPopupWidgetState();
@@ -129,6 +135,7 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
       infoPopupDismissed: widget.infoPopupDismissed,
       contentOffset: widget.contentOffset ?? const Offset(0, 0),
       indicatorOffset: widget.indicatorOffset ?? const Offset(0, 0),
+      contentMaxWidth: widget.contentMaxWidth,
     );
 
     if (!_isControllerInitialized && widget.onControllerCreated != null) {

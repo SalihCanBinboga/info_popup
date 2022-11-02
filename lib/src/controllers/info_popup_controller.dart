@@ -24,6 +24,7 @@ class InfoPopupController {
     this.onLayoutMounted,
     this.contentOffset = Offset.zero,
     this.indicatorOffset = Offset.zero,
+    this.contentMaxWidth,
   }) : _targetRenderBox = targetRenderBox;
 
   /// The [layerLink] is the layer link of the popup.
@@ -74,6 +75,11 @@ class InfoPopupController {
   /// The [infoPopupContainerSize] is the size of the popup.
   Size? infoPopupContainerSize;
 
+  /// [contentMaxWidth] is the max width of the content that is being showed.
+  /// If the [contentMaxWidth] is null, the max width will be eighty percent
+  /// of the screen.
+  final double? contentMaxWidth;
+
   /// The [show] method is used to show the popup.
   void show() {
     _infoPopupOverlayEntry = OverlayEntry(
@@ -88,6 +94,8 @@ class InfoPopupController {
           contentTheme: contentTheme,
           contentOffset: contentOffset,
           indicatorOffset: indicatorOffset,
+          dismissTriggerBehavior: dismissTriggerBehavior,
+          contentMaxWidth: contentMaxWidth,
           onLayoutMounted: (Size size) {
             Future<void>.delayed(
               const Duration(milliseconds: 30),
@@ -109,7 +117,6 @@ class InfoPopupController {
 
             dismissInfoPopup();
           },
-          dismissTriggerBehavior: dismissTriggerBehavior,
         );
       },
     );
