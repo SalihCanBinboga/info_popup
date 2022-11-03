@@ -16,6 +16,7 @@ class OverlayInfoPopup extends StatefulWidget {
     required this.indicatorOffset,
     required this.contentOffset,
     required this.dismissTriggerBehavior,
+    required this.contentMaxWidth,
     super.key,
   });
 
@@ -54,6 +55,11 @@ class OverlayInfoPopup extends StatefulWidget {
 
   /// [dismissTriggerBehavior] is the behavior of the popup when the popup is pressed.
   final PopupDismissTriggerBehavior dismissTriggerBehavior;
+
+  /// [contentMaxWidth] is the max width of the content that is shown.
+  /// If the [contentMaxWidth] is null, the max width will be eighty percent
+  /// of the screen.
+  final double? contentMaxWidth;
 
   @override
   State<OverlayInfoPopup> createState() => _OverlayInfoPopupState();
@@ -183,6 +189,14 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     );
   }
 
+  double get _contentMaxWidth {
+    if (widget.contentMaxWidth == null) {
+      return context.screenWidth * .8;
+    } else {
+      return widget.contentMaxWidth!;
+    }
+  }
+
   double get _contentMaxHeight {
     const int padding = 16;
     final double screenHeight = context.screenHeight;
@@ -263,7 +277,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                         scale: _isLayoutDone ? 1.0 : 0.0,
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
-                            maxWidth: context.screenWidth * .8,
+                            maxWidth: _contentMaxWidth,
                             maxHeight: _contentMaxHeight,
                           ),
                           child: Container(
