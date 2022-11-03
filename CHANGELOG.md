@@ -1,3 +1,7 @@
+## 2.2.0
+
+- feature: Added `contentMaxWidth` prop to `InfoPopupWidget`
+
 ## 2.1.3
 
 - doc: Update README.md
