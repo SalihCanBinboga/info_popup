@@ -75,7 +75,7 @@ class InfoPopupController {
   /// The [infoPopupContainerSize] is the size of the popup.
   Size? infoPopupContainerSize;
 
-  /// [contentMaxWidth] is the max width of the content that is being showed.
+  /// [contentMaxWidth] is the max width of the content that is shown.
   /// If the [contentMaxWidth] is null, the max width will be eighty percent
   /// of the screen.
   final double? contentMaxWidth;

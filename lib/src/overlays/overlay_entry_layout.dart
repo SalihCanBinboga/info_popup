@@ -56,7 +56,7 @@ class OverlayInfoPopup extends StatefulWidget {
   /// [dismissTriggerBehavior] is the behavior of the popup when the popup is pressed.
   final PopupDismissTriggerBehavior dismissTriggerBehavior;
 
-  /// [contentMaxWidth] is the max width of the content that is being showed.
+  /// [contentMaxWidth] is the max width of the content that is shown.
   /// If the [contentMaxWidth] is null, the max width will be eighty percent
   /// of the screen.
   final double? contentMaxWidth;
