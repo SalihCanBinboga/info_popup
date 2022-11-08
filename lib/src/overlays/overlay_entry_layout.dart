@@ -4,62 +4,47 @@ part of '../controllers/info_popup_controller.dart';
 class OverlayInfoPopup extends StatefulWidget {
   /// Creates a [InfoPopup] widget.
   const OverlayInfoPopup({
-    required this.layerLink,
-    required this.targetRenderBox,
-    required this.customContent,
-    required this.contentTitle,
-    required this.areaBackgroundColor,
-    required this.indicatorTheme,
-    required this.contentTheme,
-    required this.onAreaPressed,
-    required this.onLayoutMounted,
-    required this.indicatorOffset,
-    required this.contentOffset,
-    required this.dismissTriggerBehavior,
-    required this.contentMaxWidth,
+    required LayerLink layerLink,
+    required RenderBox targetRenderBox,
+    required Color areaBackgroundColor,
+    required InfoPopupArrowTheme indicatorTheme,
+    required InfoPopupContentTheme contentTheme,
+    required VoidCallback onAreaPressed,
+    required Function(Size size) onLayoutMounted,
+    required Offset contentOffset,
+    required Offset indicatorOffset,
+    required PopupDismissTriggerBehavior dismissTriggerBehavior,
+    Widget? customContent,
+    String? contentTitle,
+    double? contentMaxWidth,
     super.key,
-  });
+  })  : _layerLink = layerLink,
+        _targetRenderBox = targetRenderBox,
+        _areaBackgroundColor = areaBackgroundColor,
+        _indicatorTheme = indicatorTheme,
+        _contentTheme = contentTheme,
+        _onAreaPressed = onAreaPressed,
+        _onLayoutMounted = onLayoutMounted,
+        _contentOffset = contentOffset,
+        _indicatorOffset = indicatorOffset,
+        _dismissTriggerBehavior = dismissTriggerBehavior,
+        _customContent = customContent,
+        _contentTitle = contentTitle,
+        _contentMaxWidth = contentMaxWidth;
 
-  /// The [layerLink] is the layer link of the popup.
-  final LayerLink layerLink;
-
-  /// The [targetRenderBox] is the render box of the target widget.
-  final RenderBox targetRenderBox;
-
-  /// The [customContent] is the widget that will be custom shown in the popup.
-  final Widget? customContent;
-
-  /// The [contentTitle] is the title of the popup.
-  final String? contentTitle;
-
-  /// The [areaBackgroundColor] is the background color of the area that
-  final Color areaBackgroundColor;
-
-  /// [indicatorTheme] is the indicator theme of the popup.
-  final InfoPopupArrowTheme indicatorTheme;
-
-  /// [contentTheme] is the content theme of the popup.
-  final InfoPopupContentTheme contentTheme;
-
-  /// [onAreaPressed] Called when the area outside the popup is pressed.
-  final VoidCallback onAreaPressed;
-
-  /// [onLayoutMounted] Called when the info layout is mounted.
-  final Function(Size size) onLayoutMounted;
-
-  /// [contentOffset] is the offset of the content.
-  final Offset contentOffset;
-
-  /// [indicatorOffset] is the offset of the indicator.
-  final Offset indicatorOffset;
-
-  /// [dismissTriggerBehavior] is the behavior of the popup when the popup is pressed.
-  final PopupDismissTriggerBehavior dismissTriggerBehavior;
-
-  /// [contentMaxWidth] is the max width of the content that is shown.
-  /// If the [contentMaxWidth] is null, the max width will be eighty percent
-  /// of the screen.
-  final double? contentMaxWidth;
+  final LayerLink _layerLink;
+  final RenderBox _targetRenderBox;
+  final Widget? _customContent;
+  final String? _contentTitle;
+  final Color _areaBackgroundColor;
+  final InfoPopupArrowTheme _indicatorTheme;
+  final InfoPopupContentTheme _contentTheme;
+  final VoidCallback _onAreaPressed;
+  final Function(Size size) _onLayoutMounted;
+  final Offset _contentOffset;
+  final Offset _indicatorOffset;
+  final PopupDismissTriggerBehavior _dismissTriggerBehavior;
+  final double? _contentMaxWidth;
 
   @override
   State<OverlayInfoPopup> createState() => _OverlayInfoPopupState();
@@ -79,20 +64,20 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   }
 
   Offset get _indicatorOffset {
-    final double indicatorWidth = widget.indicatorTheme.arrowSize.width;
-    switch (widget.indicatorTheme.arrowDirection) {
+    final double indicatorWidth = widget._indicatorTheme.arrowSize.width;
+    switch (widget._indicatorTheme.arrowDirection) {
       case ArrowDirection.up:
         return Offset(
               _targetWidgetRect.width / 2 - indicatorWidth / 2,
               _targetWidgetRect.height,
             ) +
-            widget.indicatorOffset;
+            widget._indicatorOffset;
       case ArrowDirection.down:
         return Offset(
               _targetWidgetRect.width / 2 - indicatorWidth / 2,
-              -widget.indicatorTheme.arrowSize.height,
+              -widget._indicatorTheme.arrowSize.height,
             ) +
-            widget.indicatorOffset;
+            widget._indicatorOffset;
     }
   }
 
@@ -101,31 +86,31 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
     Offset targetCenterOffset = Offset.zero;
 
-    switch (widget.indicatorTheme.arrowDirection) {
+    switch (widget._indicatorTheme.arrowDirection) {
       case ArrowDirection.up:
         targetCenterOffset = Offset(
           _targetWidgetRect.width / 2 - contentSize.width / 2,
-          _targetWidgetRect.height + widget.indicatorTheme.arrowSize.height,
+          _targetWidgetRect.height + widget._indicatorTheme.arrowSize.height,
         );
         break;
       case ArrowDirection.down:
         targetCenterOffset = Offset(
           _targetWidgetRect.width / 2 - contentSize.width / 2,
-          -(contentSize.height + widget.indicatorTheme.arrowSize.height),
+          -(contentSize.height + widget._indicatorTheme.arrowSize.height),
         );
         break;
     }
 
-    if (widget.layerLink.leader == null) {
+    if (widget._layerLink.leader == null) {
       return targetCenterOffset;
     }
 
     Offset finalOffset = Offset.zero;
 
-    final LayerLink link = widget.layerLink;
+    final LayerLink link = widget._layerLink;
     final double targetWidth = _targetWidgetRect.width;
     final double targetDx =
-        widget.targetRenderBox.localToGlobal(Offset.zero).dx;
+        widget._targetRenderBox.localToGlobal(Offset.zero).dx;
     final double targetRightCorner = targetDx + link.leaderSize!.width;
     final double rightGap = context.screenWidth - targetRightCorner;
     final double leftGap = targetDx;
@@ -144,7 +129,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
       );
     }
 
-    return targetCenterOffset + finalOffset + widget.contentOffset;
+    return targetCenterOffset + finalOffset + widget._contentOffset;
   }
 
   void _updateContentLayoutSize() {
@@ -158,7 +143,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
             if (renderBox != null) {
               final Size size = renderBox.size;
               _contentSize = size;
-              widget.onLayoutMounted(size);
+              widget._onLayoutMounted(size);
             }
           },
         );
@@ -170,7 +155,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
   Size get contentSize {
     if (_contentSize == null) {
-      return widget.targetRenderBox.size;
+      return widget._targetRenderBox.size;
     } else {
       return _contentSize!;
     }
@@ -179,21 +164,21 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   bool get _isLayoutDone => _contentSize != null;
 
   Rect get _targetWidgetRect {
-    final Offset offset = widget.targetRenderBox.localToGlobal(Offset.zero);
+    final Offset offset = widget._targetRenderBox.localToGlobal(Offset.zero);
 
     return Rect.fromLTWH(
       offset.dx,
       offset.dy,
-      widget.targetRenderBox.size.width,
-      widget.targetRenderBox.size.height,
+      widget._targetRenderBox.size.width,
+      widget._targetRenderBox.size.height,
     );
   }
 
   double get _contentMaxWidth {
-    if (widget.contentMaxWidth == null) {
+    if (widget._contentMaxWidth == null) {
       return context.screenWidth * .8;
     } else {
-      return widget.contentMaxWidth!;
+      return widget._contentMaxWidth!;
     }
   }
 
@@ -204,7 +189,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     final double topPadding = context.mediaQuery.padding.top;
     final double targetWidgetTopPosition = _targetWidgetRect.top;
 
-    switch (widget.indicatorTheme.arrowDirection) {
+    switch (widget._indicatorTheme.arrowDirection) {
       case ArrowDirection.up:
         final double belowSpace = screenHeight -
             targetWidgetTopPosition -
@@ -219,7 +204,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   }
 
   Offset get _areaOffset {
-    switch (widget.dismissTriggerBehavior) {
+    switch (widget._dismissTriggerBehavior) {
       case PopupDismissTriggerBehavior.onTapContent:
         return _bodyOffset;
       case PopupDismissTriggerBehavior.onTapArea:
@@ -228,22 +213,23 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   }
 
   bool get dismissBehaviorIsOnTapContent =>
-      widget.dismissTriggerBehavior == PopupDismissTriggerBehavior.onTapContent;
+      widget._dismissTriggerBehavior ==
+      PopupDismissTriggerBehavior.onTapContent;
 
   @override
   Widget build(BuildContext context) {
     return Align(
       child: CompositedTransformFollower(
-        link: widget.layerLink,
+        link: widget._layerLink,
         showWhenUnlinked: false,
         offset: _areaOffset,
         child: GestureDetector(
-          onTap: widget.onAreaPressed,
+          onTap: widget._onAreaPressed,
           behavior: dismissBehaviorIsOnTapContent
               ? null
               : HitTestBehavior.translucent,
           child: Material(
-            color: widget.areaBackgroundColor,
+            color: widget._areaBackgroundColor,
             child: SizedBox(
               height:
                   dismissBehaviorIsOnTapContent ? null : context.screenHeight,
@@ -254,21 +240,21 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                     : MainAxisSize.max,
                 children: <Widget>[
                   CompositedTransformFollower(
-                    link: widget.layerLink,
+                    link: widget._layerLink,
                     showWhenUnlinked: false,
                     offset: _indicatorOffset,
                     child: CustomPaint(
-                      size: widget.indicatorTheme.arrowSize,
-                      painter: widget.indicatorTheme.arrowPainter ??
+                      size: widget._indicatorTheme.arrowSize,
+                      painter: widget._indicatorTheme.arrowPainter ??
                           ArrowIndicatorPainter(
                             arrowDirection:
-                                widget.indicatorTheme.arrowDirection,
-                            arrowColor: widget.indicatorTheme.color,
+                                widget._indicatorTheme.arrowDirection,
+                            arrowColor: widget._indicatorTheme.color,
                           ),
                     ),
                   ),
                   CompositedTransformFollower(
-                    link: widget.layerLink,
+                    link: widget._layerLink,
                     showWhenUnlinked: false,
                     offset: _bodyOffset,
                     child: AnimatedSize(
@@ -282,13 +268,13 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                           ),
                           child: Container(
                             key: _bodyKey,
-                            decoration: widget.customContent != null
+                            decoration: widget._customContent != null
                                 ? null
                                 : BoxDecoration(
-                                    color: widget.contentTheme
+                                    color: widget._contentTheme
                                         .infoContainerBackgroundColor,
-                                    borderRadius:
-                                        widget.contentTheme.contentBorderRadius,
+                                    borderRadius: widget
+                                        ._contentTheme.contentBorderRadius,
                                     boxShadow: const <BoxShadow>[
                                       BoxShadow(
                                         color: Color(0xFF808080),
@@ -296,16 +282,16 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                                       ),
                                     ],
                                   ),
-                            padding: widget.customContent != null
+                            padding: widget._customContent != null
                                 ? null
-                                : widget.contentTheme.contentPadding,
+                                : widget._contentTheme.contentPadding,
                             child: SingleChildScrollView(
-                              child: widget.customContent ??
+                              child: widget._customContent ??
                                   Text(
-                                    widget.contentTitle ?? '',
-                                    style: widget.contentTheme.infoTextStyle,
+                                    widget._contentTitle ?? '',
+                                    style: widget._contentTheme.infoTextStyle,
                                     textAlign:
-                                        widget.contentTheme.infoTextAlign,
+                                        widget._contentTheme.infoTextAlign,
                                   ),
                             ),
                           ),
