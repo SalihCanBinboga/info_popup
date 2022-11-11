@@ -14,6 +14,8 @@ class OverlayInfoPopup extends StatefulWidget {
     required Offset contentOffset,
     required Offset indicatorOffset,
     required PopupDismissTriggerBehavior dismissTriggerBehavior,
+    required bool enableHighlight,
+    required HighLightTheme highlightTheme,
     Widget? customContent,
     String? contentTitle,
     double? contentMaxWidth,
@@ -30,7 +32,9 @@ class OverlayInfoPopup extends StatefulWidget {
         _dismissTriggerBehavior = dismissTriggerBehavior,
         _customContent = customContent,
         _contentTitle = contentTitle,
-        _contentMaxWidth = contentMaxWidth;
+        _contentMaxWidth = contentMaxWidth,
+        _enableHighlight = enableHighlight,
+        _highLightTheme = highlightTheme;
 
   final LayerLink _layerLink;
   final RenderBox _targetRenderBox;
@@ -45,6 +49,8 @@ class OverlayInfoPopup extends StatefulWidget {
   final Offset _indicatorOffset;
   final PopupDismissTriggerBehavior _dismissTriggerBehavior;
   final double? _contentMaxWidth;
+  final bool _enableHighlight;
+  final HighLightTheme _highLightTheme;
 
   @override
   State<OverlayInfoPopup> createState() => _OverlayInfoPopupState();
@@ -71,97 +77,109 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
               _targetWidgetRect.width / 2 - indicatorWidth / 2,
               _targetWidgetRect.height,
             ) +
-            widget._indicatorOffset;
+            widget._indicatorOffset +
+            _highlightOffset;
       case ArrowDirection.down:
         return Offset(
               _targetWidgetRect.width / 2 - indicatorWidth / 2,
               -widget._indicatorTheme.arrowSize.height,
             ) +
-            widget._indicatorOffset;
+            widget._indicatorOffset +
+            _highlightOffset;
+    }
+  }
+
+  Offset get _highlightOffset {
+    double highlightVerticalGap = 0;
+
+    if (widget._enableHighlight) {
+      highlightVerticalGap = widget._highLightTheme.padding.bottom;
+    }
+
+    switch (widget._indicatorTheme.arrowDirection) {
+      case ArrowDirection.up:
+        return Offset(0, highlightVerticalGap);
+      case ArrowDirection.down:
+        return Offset(0, -highlightVerticalGap);
     }
   }
 
   Offset get _bodyOffset {
-    final Size contentSize = _contentSize == null ? Size.zero : _contentSize!;
-
     Offset targetCenterOffset = Offset.zero;
+
+    final double contentWidth = contentSize.width;
+    final double contentHeight = contentSize.height;
+    final double targetWidth = _targetWidgetRect.width;
+    final double targetHeight = _targetWidgetRect.height;
+    final double contentDxCenter =
+        targetWidth / 2 - contentWidth / 2;
 
     switch (widget._indicatorTheme.arrowDirection) {
       case ArrowDirection.up:
         targetCenterOffset = Offset(
-          _targetWidgetRect.width / 2 - contentSize.width / 2,
-          _targetWidgetRect.height + widget._indicatorTheme.arrowSize.height,
+          contentDxCenter,
+          targetHeight + widget._indicatorTheme.arrowSize.height,
         );
         break;
       case ArrowDirection.down:
         targetCenterOffset = Offset(
-          _targetWidgetRect.width / 2 - contentSize.width / 2,
-          -(contentSize.height + widget._indicatorTheme.arrowSize.height),
+          contentDxCenter,
+          -(contentHeight + widget._indicatorTheme.arrowSize.height),
         );
         break;
     }
 
-    if (widget._layerLink.leader == null) {
-      return targetCenterOffset;
+    targetCenterOffset += _highlightOffset;
+
+    final double contentLeft = contentDxCenter + _targetOffset.dx;
+    final double contentRight = contentLeft + contentWidth;
+    final double screenWidth = context.screenWidth;
+
+    if (contentLeft < 0) {
+      targetCenterOffset += Offset(-contentLeft, 0);
+    } else if (contentRight > screenWidth) {
+      targetCenterOffset += Offset(screenWidth - contentRight, 0);
     }
 
-    Offset finalOffset = Offset.zero;
-
-    final LayerLink link = widget._layerLink;
-    final double targetWidth = _targetWidgetRect.width;
-    final double targetDx =
-        widget._targetRenderBox.localToGlobal(Offset.zero).dx;
-    final double targetRightCorner = targetDx + link.leaderSize!.width;
-    final double rightGap = context.screenWidth - targetRightCorner;
-    final double leftGap = targetDx;
-
-    finalOffset = const Offset(0, 0);
-
-    if (rightGap < contentSize.width / 2 && leftGap > contentSize.width / 2) {
-      finalOffset = Offset(
-        -(contentSize.width - targetWidth) / 2 + rightGap,
-        0,
-      );
-    } else if (leftGap < contentSize.width / 2) {
-      finalOffset = Offset(
-        (contentSize.width - targetWidth) / 2 - leftGap,
-        0,
-      );
-    }
-
-    return targetCenterOffset + finalOffset + widget._contentOffset;
-  }
-
-  void _updateContentLayoutSize() {
-    Future<dynamic>.microtask(
-      () {
-        setState(
-          () {
-            final RenderBox? renderBox =
-                _bodyKey.currentContext!.findRenderObject() as RenderBox?;
-
-            if (renderBox != null) {
-              final Size size = renderBox.size;
-              _contentSize = size;
-              widget._onLayoutMounted(size);
-            }
-          },
-        );
-      },
-    );
+    return targetCenterOffset + widget._contentOffset;
   }
 
   Size? _contentSize;
 
   Size get contentSize {
-    if (_contentSize == null) {
+    if (!_isLayoutMounted) {
       return widget._targetRenderBox.size;
     } else {
       return _contentSize!;
     }
   }
 
-  bool get _isLayoutDone => _contentSize != null;
+  void _updateContentLayoutSize() {
+    Future<dynamic>.microtask(
+      () {
+        Future<void>.delayed(
+          const Duration(milliseconds: 50),
+          () {
+            setState(
+              () {
+                final RenderBox? renderBox =
+                    _bodyKey.currentContext!.findRenderObject() as RenderBox?;
+
+                if (renderBox != null) {
+                  final Size size = renderBox.size;
+                  _contentSize = size;
+
+                  widget._onLayoutMounted(size);
+                }
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  bool get _isLayoutMounted => _contentSize != null;
 
   Rect get _targetWidgetRect {
     final Offset offset = widget._targetRenderBox.localToGlobal(Offset.zero);
@@ -212,55 +230,85 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     }
   }
 
-  bool get dismissBehaviorIsOnTapContent =>
+  Offset get _targetOffset {
+    return widget._targetRenderBox.localToGlobal(Offset.zero);
+  }
+
+  bool get _dismissBehaviorIsOnTapContent =>
       widget._dismissTriggerBehavior ==
       PopupDismissTriggerBehavior.onTapContent;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      child: CompositedTransformFollower(
-        link: widget._layerLink,
-        showWhenUnlinked: false,
-        offset: _areaOffset,
-        child: GestureDetector(
-          onTap: widget._onAreaPressed,
-          behavior: dismissBehaviorIsOnTapContent
-              ? null
-              : HitTestBehavior.translucent,
-          child: Material(
-            color: widget._areaBackgroundColor,
-            child: SizedBox(
-              height:
-                  dismissBehaviorIsOnTapContent ? null : context.screenHeight,
-              width: dismissBehaviorIsOnTapContent ? null : context.screenWidth,
-              child: Column(
-                mainAxisSize: dismissBehaviorIsOnTapContent
-                    ? MainAxisSize.min
-                    : MainAxisSize.max,
-                children: <Widget>[
-                  CompositedTransformFollower(
-                    link: widget._layerLink,
-                    showWhenUnlinked: false,
-                    offset: _indicatorOffset,
-                    child: CustomPaint(
-                      size: widget._indicatorTheme.arrowSize,
-                      painter: widget._indicatorTheme.arrowPainter ??
-                          ArrowIndicatorPainter(
-                            arrowDirection:
-                                widget._indicatorTheme.arrowDirection,
-                            arrowColor: widget._indicatorTheme.color,
-                          ),
+    return ClipPath(
+      clipper: widget._enableHighlight
+          ? _HighLighter(
+              area: Rect.fromLTWH(
+                _targetWidgetRect.left,
+                _targetWidgetRect.top,
+                _targetWidgetRect.width,
+                _targetWidgetRect.height,
+              ),
+              padding: widget._highLightTheme.padding,
+              radius: widget._highLightTheme.radius,
+            )
+          : null,
+      child: Align(
+        child: CompositedTransformFollower(
+          link: widget._layerLink,
+          showWhenUnlinked: false,
+          offset: _areaOffset,
+          child: GestureDetector(
+            onTap: widget._onAreaPressed,
+            behavior: _dismissBehaviorIsOnTapContent
+                ? null
+                : HitTestBehavior.translucent,
+            child: Material(
+              color: widget._enableHighlight
+                  ? widget._highLightTheme.backgroundColor
+                  : widget._areaBackgroundColor,
+              type: (!widget._enableHighlight &&
+                      widget._areaBackgroundColor == Colors.transparent)
+                  ? MaterialType.transparency
+                  : MaterialType.canvas,
+              child: SizedBox(
+                height: _dismissBehaviorIsOnTapContent
+                    ? null
+                    : context.screenHeight,
+                width:
+                    _dismissBehaviorIsOnTapContent ? null : context.screenWidth,
+                child: Column(
+                  mainAxisSize: _dismissBehaviorIsOnTapContent
+                      ? MainAxisSize.min
+                      : MainAxisSize.max,
+                  children: <Widget>[
+                    CompositedTransformFollower(
+                      link: widget._layerLink,
+                      showWhenUnlinked: false,
+                      offset: _indicatorOffset,
+                      child: AnimatedScale(
+                        scale: _isLayoutMounted ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 50),
+                        alignment: Alignment.topCenter,
+                        child: CustomPaint(
+                          size: widget._indicatorTheme.arrowSize,
+                          painter: widget._indicatorTheme.arrowPainter ??
+                              ArrowIndicatorPainter(
+                                arrowDirection:
+                                    widget._indicatorTheme.arrowDirection,
+                                arrowColor: widget._indicatorTheme.color,
+                              ),
+                        ),
+                      ),
                     ),
-                  ),
-                  CompositedTransformFollower(
-                    link: widget._layerLink,
-                    showWhenUnlinked: false,
-                    offset: _bodyOffset,
-                    child: AnimatedSize(
-                      duration: const Duration(milliseconds: 100),
-                      child: Transform.scale(
-                        scale: _isLayoutDone ? 1.0 : 0.0,
+                    CompositedTransformFollower(
+                      link: widget._layerLink,
+                      showWhenUnlinked: false,
+                      offset: _bodyOffset,
+                      child: AnimatedScale(
+                        scale: _isLayoutMounted ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 50),
+                        alignment: Alignment.topCenter,
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
                             maxWidth: _contentMaxWidth,
@@ -297,9 +345,9 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                           ),
                         ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
