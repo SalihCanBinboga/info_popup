@@ -1,3 +1,10 @@
+## 2.3.0
+
+- feature: Added HighLighter Feature
+- feature: Improve for popup horizontal alignment calculation
+- refactor: Refactored the whole OverlayEntryLayout (Major Update Reason)
+- refactor: Improve popup opening animation performance
+
 ## 2.2.0
 
 - feature: Added `contentMaxWidth` prop to `InfoPopupWidget`
@@ -10,7 +17,7 @@
 
 - doc: Deployed to hosting to test an example project
 - You can test now! [Info Popup](https://info-popup.web.app/#/ "Info Popup")
- 
+
 ## 2.1.0
 
 - feature: Added `indicatorOffset` prop to `InfoPopupWidget`
@@ -25,7 +32,7 @@
 - fix: Bottom sheet offset is now calculated correctly in web
 - deprecated: Removed `infoText` & `infoWidget` props
 - deprecated: Removed `arrowGap` & `arrowAlignment` props
- 
+
 ## 1.4.0
 
 - refactor: Improved calculating above and below the target widget remaining area
@@ -53,7 +60,7 @@
 ## 1.0.10
 
 - doc: update planned task to README.md
- 
+
 ## 1.0.9
 
 - doc: add planned task to README.md
@@ -62,7 +69,7 @@
 
 - doc: GIF size reduced
 - doc: README.md updated
- 
+
 ## 1.0.7
 
 - doc: GIF speed updated
@@ -71,7 +78,7 @@
 
 - test: Added some simple widget tests
 - refactor: Disabled automatic showing info popup structure in example
- 
+
 ## 1.0.5
 
 - Update README.md
