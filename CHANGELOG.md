@@ -1,6 +1,6 @@
 ## 2.3.0
 
-- feature: Added HighLighter Feature
+- feature: **Highlight** feature is now available!
 - feature: Improve for popup horizontal alignment calculation
 - refactor: Refactored the whole OverlayEntryLayout (Major Update Reason)
 - refactor: Improve popup opening animation performance

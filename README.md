@@ -1,6 +1,8 @@
 # Info Popup
 
-The simple way to show the user some information on your selected widget.
+The simple way to show the user some information on your selected widget. 
+
+Now more effective with the **highlight** feature.
 
 You can test now [Info Popup](https://info-popup.web.app/#/ "Info Popup")
 
