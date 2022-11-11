@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:info_popup/info_popup.dart';
 
+import 'themes/high_light_theme.dart';
+
 /// A widget that shows a popup with text.
 class InfoPopupWidget extends StatefulWidget {
   /// Creates a [InfoPopupWidget] widget.
@@ -20,6 +22,8 @@ class InfoPopupWidget extends StatefulWidget {
     this.contentOffset,
     this.indicatorOffset,
     this.contentMaxWidth,
+    this.enableHighlight = false,
+    this.highLightTheme,
     super.key,
   }) : assert(customContent == null || contentTitle == null,
             'You can not use both customContent and contentTitle at the same time.');
@@ -67,6 +71,14 @@ class InfoPopupWidget extends StatefulWidget {
   /// If the [contentMaxWidth] is null, the max width will be eighty percent
   /// of the screen.
   final double? contentMaxWidth;
+
+  /// The [enableHighlight] is the boolean value that indicates whether the
+  /// highlight is enabled or not.
+  final bool enableHighlight;
+
+  /// The [highLightTheme] is the theme of the highlight. Can customize the
+  /// highlight border radius and the padding.
+  final HighLightTheme? highLightTheme;
 
   @override
   State<InfoPopupWidget> createState() => _InfoPopupWidgetState();
@@ -136,6 +148,8 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
       contentOffset: widget.contentOffset ?? const Offset(0, 0),
       indicatorOffset: widget.indicatorOffset ?? const Offset(0, 0),
       contentMaxWidth: widget.contentMaxWidth,
+      enableHighlight: widget.enableHighlight,
+      highLightTheme: widget.highLightTheme ?? HighLightTheme.defaultTheme(),
     );
 
     if (!_isControllerInitialized && widget.onControllerCreated != null) {

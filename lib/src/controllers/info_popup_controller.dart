@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:info_popup/info_popup.dart';
 
 import '../painters/arrow_indicator_painter.dart';
+import '../themes/high_light_theme.dart';
 
 part '../overlays/overlay_entry_layout.dart';
+
+part '../painters/high_lighter.dart';
 
 /// Popup manager for the InfoPopup widget.
 /// [InfoPopupController] is used to show and dismiss the popup.
@@ -17,6 +20,8 @@ class InfoPopupController {
     required this.contentTheme,
     required this.layerLink,
     required this.dismissTriggerBehavior,
+    required this.enableHighlight,
+    required this.highLightTheme,
     this.infoPopupDismissed,
     this.contentTitle,
     this.customContent,
@@ -80,6 +85,14 @@ class InfoPopupController {
   /// of the screen.
   final double? contentMaxWidth;
 
+  /// The [enableHighlight] is the boolean value that indicates whether the
+  /// highlight is enabled or not.
+  final bool enableHighlight;
+
+  /// The [highLightTheme] is the theme of the highlight. Can customize the
+  /// highlight border radius and the padding.
+  final HighLightTheme highLightTheme;
+
   /// The [show] method is used to show the popup.
   void show() {
     _infoPopupOverlayEntry = OverlayEntry(
@@ -94,6 +107,8 @@ class InfoPopupController {
           contentTheme: contentTheme,
           contentOffset: contentOffset,
           indicatorOffset: indicatorOffset,
+          enableHighlight: enableHighlight,
+          highlightTheme: HighLightTheme.defaultTheme(),
           dismissTriggerBehavior: dismissTriggerBehavior,
           contentMaxWidth: contentMaxWidth,
           onLayoutMounted: (Size size) {

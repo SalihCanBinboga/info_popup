@@ -169,6 +169,12 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                 behavior: HitTestBehavior.translucent,
                 child: const Text('List Example'),
               ),
+              const SizedBox(height: 30),
+              const InfoPopupWidget(
+                enableHighlight: true,
+                contentTitle: 'This is a HighLighted Info Popup',
+                child: Text('HighLighted Info Popup Example'),
+              ),
             ],
           ),
         ),
