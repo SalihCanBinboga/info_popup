@@ -18,7 +18,7 @@ class InfoPopupWidget extends StatefulWidget {
     this.contentTheme,
     this.onAreaPressed,
     this.onLayoutMounted,
-    this.dismissTriggerBehavior = PopupDismissTriggerBehavior.onTapArea,
+    this.dismissTriggerBehavior = PopupDismissTriggerBehavior.anyWhere,
     this.contentOffset,
     this.indicatorOffset,
     this.contentMaxWidth,

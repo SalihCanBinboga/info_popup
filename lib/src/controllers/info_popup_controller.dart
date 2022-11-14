@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:info_popup/info_popup.dart';
 
@@ -111,6 +112,7 @@ class InfoPopupController {
           highlightTheme: HighLightTheme.defaultTheme(),
           dismissTriggerBehavior: dismissTriggerBehavior,
           contentMaxWidth: contentMaxWidth,
+          hideOverlay: dismissInfoPopup,
           onLayoutMounted: (Size size) {
             Future<void>.delayed(
               const Duration(milliseconds: 30),

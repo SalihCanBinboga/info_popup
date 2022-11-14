@@ -16,6 +16,7 @@ class OverlayInfoPopup extends StatefulWidget {
     required PopupDismissTriggerBehavior dismissTriggerBehavior,
     required bool enableHighlight,
     required HighLightTheme highlightTheme,
+    required VoidCallback hideOverlay,
     Widget? customContent,
     String? contentTitle,
     double? contentMaxWidth,
@@ -34,7 +35,8 @@ class OverlayInfoPopup extends StatefulWidget {
         _contentTitle = contentTitle,
         _contentMaxWidth = contentMaxWidth,
         _enableHighlight = enableHighlight,
-        _highLightTheme = highlightTheme;
+        _highLightTheme = highlightTheme,
+        _hideOverlay = hideOverlay;
 
   final LayerLink _layerLink;
   final RenderBox _targetRenderBox;
@@ -51,6 +53,7 @@ class OverlayInfoPopup extends StatefulWidget {
   final double? _contentMaxWidth;
   final bool _enableHighlight;
   final HighLightTheme _highLightTheme;
+  final VoidCallback _hideOverlay;
 
   @override
   State<OverlayInfoPopup> createState() => _OverlayInfoPopupState();
