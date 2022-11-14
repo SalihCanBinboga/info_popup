@@ -64,12 +64,62 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
   @override
   void initState() {
+    GestureBinding.instance.pointerRouter.addGlobalRoute(_handlePointerEvent);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         _updateContentLayoutSize();
       },
     );
     super.initState();
+  }
+
+  void _handlePointerEvent(PointerEvent event) {
+    if (!mounted) {
+      return;
+    }
+    final RenderBox? renderBox =
+    _bodyKey.currentContext!.findRenderObject() as RenderBox?;
+
+    if (renderBox == null) {
+      return;
+    }
+
+    final Offset clickPosition = event.position;
+    final Offset contentPosition = renderBox.localToGlobal(Offset.zero);
+
+    switch (widget._dismissTriggerBehavior) {
+      case PopupDismissTriggerBehavior.onTapContent:
+        if (clickPosition.dx >= contentPosition.dx &&
+            clickPosition.dx <= contentPosition.dx + contentSize.width &&
+            clickPosition.dy >= contentPosition.dy &&
+            clickPosition.dy <= contentPosition.dy + contentSize.height) {
+          widget._hideOverlay();
+        }
+        break;
+      case PopupDismissTriggerBehavior.onTapArea:
+        if (!(clickPosition.dx >= contentPosition.dx &&
+            clickPosition.dx <= contentPosition.dx + contentSize.width &&
+            clickPosition.dy >= contentPosition.dy &&
+            clickPosition.dy <= contentPosition.dy + contentSize.height)) {
+          widget._onAreaPressed();
+        }
+        break;
+      case PopupDismissTriggerBehavior.anyWhere:
+        widget._hideOverlay();
+        break;
+      case PopupDismissTriggerBehavior.manuel:
+        // do nothing
+        break;
+    }
+  }
+
+  @override
+  void dispose() {
+    GestureBinding.instance.pointerRouter.removeGlobalRoute(
+      _handlePointerEvent,
+    );
+
+    super.dispose();
   }
 
   Offset get _indicatorOffset {
@@ -114,8 +164,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     final double contentHeight = contentSize.height;
     final double targetWidth = _targetWidgetRect.width;
     final double targetHeight = _targetWidgetRect.height;
-    final double contentDxCenter =
-        targetWidth / 2 - contentWidth / 2;
+    final double contentDxCenter = targetWidth / 2 - contentWidth / 2;
 
     switch (widget._indicatorTheme.arrowDirection) {
       case ArrowDirection.up:
@@ -157,34 +206,61 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     }
   }
 
+  @override
+  void didUpdateWidget(covariant OverlayInfoPopup oldWidget) {
+    _updateContentLayoutSize();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeDependencies() {
+    _updateContentLayoutSize();
+    super.didChangeDependencies();
+  }
+
+  bool _isLayoutMounted = false;
+
   void _updateContentLayoutSize() {
     Future<dynamic>.microtask(
       () {
         Future<void>.delayed(
           const Duration(milliseconds: 50),
           () {
-            setState(
-              () {
-                final RenderBox? renderBox =
-                    _bodyKey.currentContext!.findRenderObject() as RenderBox?;
+            if (!mounted) {
+              return;
+            }
 
-                if (renderBox != null) {
-                  final Size size = renderBox.size;
+            final RenderBox? renderBox =
+                _bodyKey.currentContext!.findRenderObject() as RenderBox?;
+
+            if (renderBox == null) {
+              return;
+            }
+
+            final Size size = renderBox.size;
+            final Offset offset = renderBox.localToGlobal(Offset.zero);
+
+            if (size != _contentSize) {
+              setState(
+                () {
                   _contentSize = size;
 
                   widget._onLayoutMounted(size);
-                }
-              },
-            );
+                  _isLayoutMounted = true;
+                },
+              );
+            }
           },
         );
       },
     );
   }
 
-  bool get _isLayoutMounted => _contentSize != null;
-
   Rect get _targetWidgetRect {
+    if (!widget._targetRenderBox.attached) {
+      return Rect.zero;
+    }
+
     final Offset offset = widget._targetRenderBox.localToGlobal(Offset.zero);
 
     return Rect.fromLTWH(
@@ -230,6 +306,9 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
         return _bodyOffset;
       case PopupDismissTriggerBehavior.onTapArea:
         return Offset(-_targetWidgetRect.left, -_targetWidgetRect.top);
+      case PopupDismissTriggerBehavior.anyWhere:
+      case PopupDismissTriggerBehavior.manuel:
+        return Offset.zero;
     }
   }
 
@@ -261,96 +340,88 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
           link: widget._layerLink,
           showWhenUnlinked: false,
           offset: _areaOffset,
-          child: GestureDetector(
-            onTap: widget._onAreaPressed,
-            behavior: _dismissBehaviorIsOnTapContent
-                ? null
-                : HitTestBehavior.translucent,
-            child: Material(
-              color: widget._enableHighlight
-                  ? widget._highLightTheme.backgroundColor
-                  : widget._areaBackgroundColor,
-              type: (!widget._enableHighlight &&
-                      widget._areaBackgroundColor == Colors.transparent)
-                  ? MaterialType.transparency
-                  : MaterialType.canvas,
-              child: SizedBox(
-                height: _dismissBehaviorIsOnTapContent
-                    ? null
-                    : context.screenHeight,
-                width:
-                    _dismissBehaviorIsOnTapContent ? null : context.screenWidth,
-                child: Column(
-                  mainAxisSize: _dismissBehaviorIsOnTapContent
-                      ? MainAxisSize.min
-                      : MainAxisSize.max,
-                  children: <Widget>[
-                    CompositedTransformFollower(
-                      link: widget._layerLink,
-                      showWhenUnlinked: false,
-                      offset: _indicatorOffset,
-                      child: AnimatedScale(
-                        scale: _isLayoutMounted ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 50),
-                        alignment: Alignment.topCenter,
-                        child: CustomPaint(
-                          size: widget._indicatorTheme.arrowSize,
-                          painter: widget._indicatorTheme.arrowPainter ??
-                              ArrowIndicatorPainter(
-                                arrowDirection:
-                                    widget._indicatorTheme.arrowDirection,
-                                arrowColor: widget._indicatorTheme.color,
-                              ),
+          child: Material(
+            color: widget._enableHighlight
+                ? widget._highLightTheme.backgroundColor
+                : widget._areaBackgroundColor,
+            type: (!widget._enableHighlight &&
+                    widget._areaBackgroundColor == Colors.transparent)
+                ? MaterialType.transparency
+                : MaterialType.canvas,
+            child: SizedBox(
+              height:
+                  _dismissBehaviorIsOnTapContent ? null : context.screenHeight,
+              width:
+                  _dismissBehaviorIsOnTapContent ? null : context.screenWidth,
+              child: Column(
+                mainAxisSize: _dismissBehaviorIsOnTapContent
+                    ? MainAxisSize.min
+                    : MainAxisSize.max,
+                children: <Widget>[
+                  CompositedTransformFollower(
+                    link: widget._layerLink,
+                    showWhenUnlinked: false,
+                    offset: _indicatorOffset,
+                    child: AnimatedScale(
+                      scale: _isLayoutMounted ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 50),
+                      alignment: Alignment.topCenter,
+                      child: CustomPaint(
+                        size: widget._indicatorTheme.arrowSize,
+                        painter: widget._indicatorTheme.arrowPainter ??
+                            ArrowIndicatorPainter(
+                              arrowDirection:
+                                  widget._indicatorTheme.arrowDirection,
+                              arrowColor: widget._indicatorTheme.color,
+                            ),
+                      ),
+                    ),
+                  ),
+                  CompositedTransformFollower(
+                    link: widget._layerLink,
+                    showWhenUnlinked: false,
+                    offset: _bodyOffset,
+                    child: AnimatedScale(
+                      scale: _isLayoutMounted ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 50),
+                      alignment: Alignment.topCenter,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: _contentMaxWidth,
+                          maxHeight: _contentMaxHeight,
+                        ),
+                        child: Container(
+                          key: _bodyKey,
+                          decoration: widget._customContent != null
+                              ? null
+                              : BoxDecoration(
+                                  color: widget._contentTheme
+                                      .infoContainerBackgroundColor,
+                                  borderRadius:
+                                      widget._contentTheme.contentBorderRadius,
+                                  boxShadow: const <BoxShadow>[
+                                    BoxShadow(
+                                      color: Color(0xFF808080),
+                                      blurRadius: 1.0,
+                                    ),
+                                  ],
+                                ),
+                          padding: widget._customContent != null
+                              ? null
+                              : widget._contentTheme.contentPadding,
+                          child: SingleChildScrollView(
+                            child: widget._customContent ??
+                                Text(
+                                  widget._contentTitle ?? '',
+                                  style: widget._contentTheme.infoTextStyle,
+                                  textAlign: widget._contentTheme.infoTextAlign,
+                                ),
+                          ),
                         ),
                       ),
                     ),
-                    CompositedTransformFollower(
-                      link: widget._layerLink,
-                      showWhenUnlinked: false,
-                      offset: _bodyOffset,
-                      child: AnimatedScale(
-                        scale: _isLayoutMounted ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 50),
-                        alignment: Alignment.topCenter,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: _contentMaxWidth,
-                            maxHeight: _contentMaxHeight,
-                          ),
-                          child: Container(
-                            key: _bodyKey,
-                            decoration: widget._customContent != null
-                                ? null
-                                : BoxDecoration(
-                                    color: widget._contentTheme
-                                        .infoContainerBackgroundColor,
-                                    borderRadius: widget
-                                        ._contentTheme.contentBorderRadius,
-                                    boxShadow: const <BoxShadow>[
-                                      BoxShadow(
-                                        color: Color(0xFF808080),
-                                        blurRadius: 1.0,
-                                      ),
-                                    ],
-                                  ),
-                            padding: widget._customContent != null
-                                ? null
-                                : widget._contentTheme.contentPadding,
-                            child: SingleChildScrollView(
-                              child: widget._customContent ??
-                                  Text(
-                                    widget._contentTitle ?? '',
-                                    style: widget._contentTheme.infoTextStyle,
-                                    textAlign:
-                                        widget._contentTheme.infoTextAlign,
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
           ),
