@@ -1,3 +1,8 @@
+## 2.4.0
+
+- feature: Added automatic popup dismiss
+- feature: Added new dismiss trigger values (`anyWhere`, `manuel`)
+ 
 ## 2.3.0
 
 - feature: **Highlight** feature is now available!
