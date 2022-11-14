@@ -238,7 +238,6 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
             }
 
             final Size size = renderBox.size;
-            final Offset offset = renderBox.localToGlobal(Offset.zero);
 
             if (size != _contentSize) {
               setState(
