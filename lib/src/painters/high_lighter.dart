@@ -1,4 +1,6 @@
 
+// ignore_for_file: use_late_for_private_fields_and_variables
+
 part of '../controllers/info_popup_controller.dart';
 
 class _HighLighter extends CustomClipper<Path> {
