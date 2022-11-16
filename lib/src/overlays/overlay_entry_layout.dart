@@ -78,7 +78,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
       return;
     }
     final RenderBox? renderBox =
-    _bodyKey.currentContext!.findRenderObject() as RenderBox?;
+        _bodyKey.currentContext!.findRenderObject() as RenderBox?;
 
     if (renderBox == null) {
       return;
@@ -300,6 +300,10 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   }
 
   Offset get _areaOffset {
+    if (widget._enableHighlight) {
+      return Offset(-_targetWidgetRect.left, -_targetWidgetRect.top);
+    }
+
     switch (widget._dismissTriggerBehavior) {
       case PopupDismissTriggerBehavior.onTapContent:
         return _bodyOffset;
