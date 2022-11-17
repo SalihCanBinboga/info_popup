@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:info_popup/info_popup.dart';
 
@@ -98,21 +100,50 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
     super.dispose();
   }
 
+  bool get _isMouseRegionPermitted {
+    final bool mouseIsConnected =
+        RendererBinding.instance.mouseTracker.mouseIsConnected;
+
+    if (!mouseIsConnected || !_isControllerInitialized) {
+      return false;
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     SchedulerBinding.instance.addPostFrameCallback((_) => _updateRenderBox());
-    return GestureDetector(
-      onTap: () {
-        if (_infoPopupController != null && !_infoPopupController!.isShowing) {
+    return MouseRegion(
+      onHover: (PointerHoverEvent event) {
+        if (_isMouseRegionPermitted && !_infoPopupController!.isShowing) {
           _infoPopupController!.show();
         }
       },
-      behavior: HitTestBehavior.translucent,
-      child: CompositedTransformTarget(
-        link: _layerLink,
-        child: Container(
-          key: _infoPopupTargetKey,
-          child: widget.child,
+      onExit: (PointerExitEvent event) {
+        if (widget.dismissTriggerBehavior ==
+            PopupDismissTriggerBehavior.manuel) {
+          return;
+        }
+
+        if (_isMouseRegionPermitted && _infoPopupController!.isShowing) {
+          _infoPopupController!.dismissInfoPopup();
+        }
+      },
+      child: GestureDetector(
+        onTap: () {
+          if (_infoPopupController != null &&
+              !_infoPopupController!.isShowing) {
+            _infoPopupController!.show();
+          }
+        },
+        behavior: HitTestBehavior.translucent,
+        child: CompositedTransformTarget(
+          link: _layerLink,
+          child: Container(
+            key: _infoPopupTargetKey,
+            child: widget.child,
+          ),
         ),
       ),
     );

@@ -62,6 +62,7 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                   color: Colors.black87,
                   arrowDirection: ArrowDirection.down,
                 ),
+                dismissTriggerBehavior: PopupDismissTriggerBehavior.manuel,
                 customContent: Container(
                   width: context.screenWidth * .8,
                   decoration: BoxDecoration(

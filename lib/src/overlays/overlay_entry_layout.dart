@@ -73,10 +73,23 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     super.initState();
   }
 
+  bool _isPointListenerDisposed = false;
   void _handlePointerEvent(PointerEvent event) {
     if (!mounted) {
       return;
     }
+
+    final bool mouseIsConnected =
+        RendererBinding.instance.mouseTracker.mouseIsConnected;
+
+    if (mouseIsConnected) {
+      GestureBinding.instance.pointerRouter.removeGlobalRoute(
+        _handlePointerEvent,
+      );
+      _isPointListenerDisposed = true;
+      return;
+    }
+
     final RenderBox? renderBox =
         _bodyKey.currentContext!.findRenderObject() as RenderBox?;
 
@@ -115,9 +128,11 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
   @override
   void dispose() {
-    GestureBinding.instance.pointerRouter.removeGlobalRoute(
-      _handlePointerEvent,
-    );
+    if (!_isPointListenerDisposed) {
+      GestureBinding.instance.pointerRouter.removeGlobalRoute(
+        _handlePointerEvent,
+      );
+    }
 
     super.dispose();
   }
@@ -308,10 +323,9 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
       case PopupDismissTriggerBehavior.onTapContent:
         return _bodyOffset;
       case PopupDismissTriggerBehavior.onTapArea:
-        return Offset(-_targetWidgetRect.left, -_targetWidgetRect.top);
       case PopupDismissTriggerBehavior.anyWhere:
       case PopupDismissTriggerBehavior.manuel:
-        return Offset.zero;
+        return Offset(-_targetWidgetRect.left, -_targetWidgetRect.top);
     }
   }
 
@@ -348,7 +362,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                 ? widget._highLightTheme.backgroundColor
                 : widget._areaBackgroundColor,
             type: (!widget._enableHighlight &&
-                    widget._areaBackgroundColor == Colors.transparent)
+                widget._areaBackgroundColor == Colors.transparent)
                 ? MaterialType.transparency
                 : MaterialType.canvas,
             child: SizedBox(
@@ -357,9 +371,6 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
               width:
                   _dismissBehaviorIsOnTapContent ? null : context.screenWidth,
               child: Column(
-                mainAxisSize: _dismissBehaviorIsOnTapContent
-                    ? MainAxisSize.min
-                    : MainAxisSize.max,
                 children: <Widget>[
                   CompositedTransformFollower(
                     link: widget._layerLink,
