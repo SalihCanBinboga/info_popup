@@ -1,4 +1,3 @@
-
 // ignore_for_file: use_late_for_private_fields_and_variables
 
 part of '../controllers/info_popup_controller.dart';
@@ -40,5 +39,5 @@ class _HighLighter extends CustomClipper<Path> {
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) =>
       oldClipper is _HighLighter &&
-          (radius != oldClipper.radius || area != oldClipper.area);
+      (radius != oldClipper.radius || area != oldClipper.area);
 }

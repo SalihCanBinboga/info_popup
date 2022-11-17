@@ -362,7 +362,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                 ? widget._highLightTheme.backgroundColor
                 : widget._areaBackgroundColor,
             type: (!widget._enableHighlight &&
-                widget._areaBackgroundColor == Colors.transparent)
+                    widget._areaBackgroundColor == Colors.transparent)
                 ? MaterialType.transparency
                 : MaterialType.canvas,
             child: SizedBox(
