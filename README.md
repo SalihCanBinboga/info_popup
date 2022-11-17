@@ -12,6 +12,7 @@ You can test now [Info Popup](https://info-popup.web.app/#/ "Info Popup")
 - Fully editable content area
 
 ![Alt Text](assets/readme/example_presentation.gif)
+![Alt Text](assets/readme/highlight_example.png)
 
 
 ## Getting started
