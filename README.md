@@ -11,10 +11,8 @@ You can test now [Info Popup](https://info-popup.web.app/#/ "Info Popup")
 - Info holder with dynamic size
 - Fully editable content area
 
-<p>
-<img src="https://github.com/SalihCanBinboga/info_popup/blob/master/assets/readme/example_presentation.gif" width="200">
-<img src="https://github.com/SalihCanBinboga/info_popup/blob/master/assets/readme/highlight_example.png" width="200">
-</p>
+![MainPresentation](assets/readme/example_presentation.gif)
+![HighlightExample](assets/readme/highlight_example.png)
 
 
 ## Getting started
