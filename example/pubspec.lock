@@ -59,7 +59,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.4.2"
+    version: "2.4.6"
   matcher:
     dependency: transitive
     description:
