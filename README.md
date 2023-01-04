@@ -1,52 +1,65 @@
-# Info Popup
+## Introduction
 
-The simple way to show the user some information on your selected widget. 
+The `info_popup` package allows you to easily show a **simple**, **customizable** popup on your wrapped widget. The **highlight feature**, which can be activated at will, helps draw the user's attention to the desired location. 
 
-Now more effective with the **highlight** feature.
-
-You can test now [Info Popup](https://info-popup.web.app/#/ "Info Popup")
+You can test it now on the [Info Popup preview page](https://info-popup.web.app/#/ "Info Popup"). 
+Note that the website experience may be different.
 
 ## Features
 
-- Info holder with dynamic size
-- Fully editable content area
+- Display a ***customizable*** popup on your wrapped widget
+- Activate the ***highlight*** feature to draw the user's attention to the desired location
+- Fully customize the content of the popup
+- Add margins to the popup from ***any side***
 
 ![MainPresentation](assets/readme/example_presentation.gif)
 ![HighlightExample](assets/readme/highlight_example.png)
 
+## Getting Started
 
-## Getting started
+To use this package, add `info_popup` as a dependency in your `pubspec.yaml` file.
 
-### Use this package as a Library
----
-Depend On it
+```yaml
+dependencies:
+  info_popup: ^2.4.6 
+```
 
-Run this command
+Alternatively, you can add it to your project by running the following commands in your terminal:
 
 with Dart:
 
-```
+```shell
 $ dart pub add info_popup
 ```
 
 with Flutter:
 
-```
+```shell
 $ flutter pub add info_popup
-```
-
-This will add a line like this to your package's pubspec.yaml (and run an implicit `dart pub get` or `flutter pub get`):
-
-```
-dependencies:
-  info_popup: ^1.0.0
 ```
 
 ## Usage
 
-All you have to do is wrap it in the widget you want to show information with **InfoPopupWidget**. With **InfoPopupController**, you can customize it as you wish, and turn it off and on.
+To show a popup, wrap the widget that you want to display the popup on with the `InfoPopupWidget` widget. All you have to do is wrap it in the widget you want to show information with the `InfoPopupWidget` widget. With the `InfoPopupController`, you can customize it as you wish, and turn it on and off.
 
-##### Normal Info Text Using
+```dart
+import 'package:info_popup/info_popup.dart';
+```
+
+```dart
+	InfoPopupWidget(
+		contentTitle: 'Info Popup Details',
+		child: Icon(
+			Icons.info,
+			color: Colors.pink,
+		),
+	),
+```
+
+## Example 
+
+This is a normal info text displayed using the `InfoPopupWidget` widget with several optional parameters.
+
 ```dart
               InfoPopupWidget(
                 contentTitle: 'Info Popup Details',
@@ -83,6 +96,7 @@ All you have to do is wrap it in the widget you want to show information with **
                 ),
               ),
 ```
+"This is a ***custom popup*** example created using the `InfoPopupWidget` widget.
 
 ##### Custom Popup Widget
 ```dart
@@ -142,3 +156,12 @@ All you have to do is wrap it in the widget you want to show information with **
                 ),
               ),
 ```
+
+
+## Conclusion
+
+The info_popup package provides a simple and effective way to show a customizable popup on your wrapped widget. With the highlight feature, you can draw the user's attention to the desired location.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/SalihCanBinboga/info_popup/blob/master/LICENSE "LICENSE") file for details.
