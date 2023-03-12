@@ -7,6 +7,9 @@ class ListExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('List Example'),
+      ),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: ListView.builder(
