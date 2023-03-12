@@ -1,3 +1,9 @@
+## 3.0.0
+
+- fix: This fixes the issue of the InfoPopupWidget not updating when the popup content or a property of the InfoPopupWidget changes.
+- feat: Upgrade Flutter SDK to 3.7.1
+- doc: The readme.md file has been updated.
+
 ## 2.4.0
 
 - feature: Added automatic popup dismiss

@@ -139,7 +139,7 @@ class InfoPopupController {
       },
     );
 
-    Overlay.of(context)!.insert(_infoPopupOverlayEntry!);
+    Overlay.of(context).insert(_infoPopupOverlayEntry!);
   }
 
   /// The [isShowing] method is used to check if the popup is showing.

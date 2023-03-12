@@ -112,6 +112,110 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
   }
 
   @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(
+      DiagnosticsProperty<Widget>(
+        'child',
+        widget.child,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<String>(
+        'contentTitle',
+        widget.contentTitle,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<Widget>(
+        'customContent',
+        widget.customContent,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<Color>(
+        'areaBackgroundColor',
+        widget.areaBackgroundColor,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<InfoPopupArrowTheme>(
+        'arrowTheme',
+        widget.arrowTheme,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<InfoPopupContentTheme>(
+        'contentTheme',
+        widget.contentTheme,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<PopupDismissTriggerBehavior>(
+        'dismissTriggerBehavior',
+        widget.dismissTriggerBehavior,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<Offset>(
+        'contentOffset',
+        widget.contentOffset,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<Offset>(
+        'indicatorOffset',
+        widget.indicatorOffset,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<double>(
+        'contentMaxWidth',
+        widget.contentMaxWidth,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<bool>(
+        'enableHighlight',
+        widget.enableHighlight,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<HighLightTheme>(
+        'highLightTheme',
+        widget.highLightTheme,
+      ),
+    );
+
+    super.debugFillProperties(properties);
+  }
+
+  @override
+  void didUpdateWidget(InfoPopupWidget oldWidget) {
+    if (oldWidget.customContent != widget.customContent) {
+      print('Info Popup: You have changed the custom content. '
+          'Please restart the app to see the changes.');
+    } else {
+      if (oldWidget.contentTitle != widget.contentTitle ||
+          oldWidget.areaBackgroundColor != widget.areaBackgroundColor ||
+          oldWidget.arrowTheme != widget.arrowTheme ||
+          oldWidget.contentTheme != widget.contentTheme ||
+          oldWidget.contentOffset != widget.contentOffset ||
+          oldWidget.indicatorOffset != widget.indicatorOffset ||
+          oldWidget.contentMaxWidth != widget.contentMaxWidth ||
+          oldWidget.enableHighlight != widget.enableHighlight ||
+          oldWidget.highLightTheme != widget.highLightTheme) {
+        if (_infoPopupController != null || _isControllerInitialized) {
+          _infoPopupController!.dismissInfoPopup();
+          _infoPopupController = null;
+          _isControllerInitialized = false;
+        }
+        setState(() {});
+      }
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     SchedulerBinding.instance.addPostFrameCallback((_) => _updateRenderBox());
     return MouseRegion(

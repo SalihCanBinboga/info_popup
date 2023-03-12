@@ -1,11 +1,11 @@
 name: info_popup
 description: The simple way to show the user some information on your selected widget.
-version: 2.4.6
+version: 3.0.0
 repository: https://github.com/salihcanbinboga/info_popup
 
 environment:
-  sdk: '>=2.17.3 <3.0.0'
-  flutter: '>=1.17.0'
+  sdk: '>=2.18.4 <3.0.0'
+  flutter: '>=2.0.0'
 
 dependencies:
   flutter:
