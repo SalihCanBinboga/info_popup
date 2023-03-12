@@ -21,7 +21,7 @@ To use this package, add `info_popup` as a dependency in your `pubspec.yaml` fil
 
 ```yaml
 dependencies:
-  info_popup: ^2.4.6 
+  info_popup: ^3.0.0
 ```
 
 Alternatively, you can add it to your project by running the following commands in your terminal:

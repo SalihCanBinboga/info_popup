@@ -191,22 +191,26 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
 
   @override
   void didUpdateWidget(InfoPopupWidget oldWidget) {
-    if (oldWidget.contentTitle != widget.contentTitle ||
-        oldWidget.customContent != widget.customContent ||
-        oldWidget.areaBackgroundColor != widget.areaBackgroundColor ||
-        oldWidget.arrowTheme != widget.arrowTheme ||
-        oldWidget.contentTheme != widget.contentTheme ||
-        oldWidget.contentOffset != widget.contentOffset ||
-        oldWidget.indicatorOffset != widget.indicatorOffset ||
-        oldWidget.contentMaxWidth != widget.contentMaxWidth ||
-        oldWidget.enableHighlight != widget.enableHighlight ||
-        oldWidget.highLightTheme != widget.highLightTheme) {
-      if (_infoPopupController != null || _isControllerInitialized) {
-        _infoPopupController!.dismissInfoPopup();
-        _infoPopupController = null;
-        _isControllerInitialized = false;
+    if (oldWidget.customContent != widget.customContent) {
+      print('Info Popup: You have changed the custom content. '
+          'Please restart the app to see the changes.');
+    } else {
+      if (oldWidget.contentTitle != widget.contentTitle ||
+          oldWidget.areaBackgroundColor != widget.areaBackgroundColor ||
+          oldWidget.arrowTheme != widget.arrowTheme ||
+          oldWidget.contentTheme != widget.contentTheme ||
+          oldWidget.contentOffset != widget.contentOffset ||
+          oldWidget.indicatorOffset != widget.indicatorOffset ||
+          oldWidget.contentMaxWidth != widget.contentMaxWidth ||
+          oldWidget.enableHighlight != widget.enableHighlight ||
+          oldWidget.highLightTheme != widget.highLightTheme) {
+        if (_infoPopupController != null || _isControllerInitialized) {
+          _infoPopupController!.dismissInfoPopup();
+          _infoPopupController = null;
+          _isControllerInitialized = false;
+        }
+        setState(() {});
       }
-      setState(() {});
     }
     super.didUpdateWidget(oldWidget);
   }
