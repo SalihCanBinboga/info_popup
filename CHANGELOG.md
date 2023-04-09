@@ -1,3 +1,9 @@
+## 3.0.1
+
+- fix: This fixes the issue of the InfoPopupWidget not updating when the popup content or a property of the InfoPopupWidget changes.
+- feat: Added `enableLog` prop to `InfoPopupWidget`
+- doc: Added package profile logo.
+
 ## 3.0.0
 
 - fix: This fixes the issue of the InfoPopupWidget not updating when the popup content or a property of the InfoPopupWidget changes.
