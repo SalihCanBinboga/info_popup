@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -26,6 +27,7 @@ class InfoPopupWidget extends StatefulWidget {
     this.contentMaxWidth,
     this.enableHighlight = false,
     this.highLightTheme,
+    this.enableLog = false,
     super.key,
   }) : assert(customContent == null || contentTitle == null,
             'You can not use both customContent and contentTitle at the same time.');
@@ -77,6 +79,12 @@ class InfoPopupWidget extends StatefulWidget {
   /// The [enableHighlight] is the boolean value that indicates whether the
   /// highlight is enabled or not.
   final bool enableHighlight;
+
+  /// The [enableLog] is the boolean value that indicates whether the
+  /// log is enabled or not.
+  ///
+  /// If the [enableLog] is true, the log will be shown in the console.
+  final bool enableLog;
 
   /// The [highLightTheme] is the theme of the highlight. Can customize the
   /// highlight border radius and the padding.
@@ -192,8 +200,10 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
   @override
   void didUpdateWidget(InfoPopupWidget oldWidget) {
     if (oldWidget.customContent != widget.customContent) {
-      print('Info Popup: You have changed the custom content. '
-          'Please restart the app to see the changes.');
+      if (widget.enableLog && kDebugMode) {
+        print('Info Popup: You have changed the custom content. '
+            'Please restart the app to see the changes.');
+      }
     } else {
       if (oldWidget.contentTitle != widget.contentTitle ||
           oldWidget.areaBackgroundColor != widget.areaBackgroundColor ||
