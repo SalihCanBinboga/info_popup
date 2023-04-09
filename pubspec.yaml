@@ -5,7 +5,7 @@ homepage: https://github.com/salihcanbinboga/info_popup
 repository: https://github.com/salihcanbinboga/info_popup
 issue_tracker: https://github.com/salihcanbinboga/info_popup/issues
 screenshots:
-  - description: "Icons Launcher"
+  - description: "Info Popup Logo"
     path: assets/package_profile.webp
 
 version: 3.0.1

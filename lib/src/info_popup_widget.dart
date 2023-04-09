@@ -295,7 +295,6 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
       contentMaxWidth: widget.contentMaxWidth,
       enableHighlight: widget.enableHighlight,
       highLightTheme: widget.highLightTheme ?? HighLightTheme.defaultTheme(),
-      enableLog: widget.enableLog,
     );
 
     if (!_isControllerInitialized && widget.onControllerCreated != null) {
