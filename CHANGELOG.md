@@ -1,3 +1,7 @@
+## 3.0.3
+
+- feat: Version upgrade
+ 
 ## 3.0.1
 
 - feat: Added `enableLog` prop to `InfoPopupWidget`
