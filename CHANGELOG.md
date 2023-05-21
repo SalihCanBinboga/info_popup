@@ -1,3 +1,7 @@
+## 3.0.4
+
+- fix: Highlight theme usable in `InfoPopupWidget` now
+
 ## 3.0.3
 
 - feat: Version upgrade
