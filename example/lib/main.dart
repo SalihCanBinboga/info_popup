@@ -69,8 +69,8 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: const <Widget>[
+                  child: const Column(
+                    children: <Widget>[
                       TextField(
                         decoration: InputDecoration(
                           hintText: 'Enter your name',
@@ -112,12 +112,12 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                         color: Colors.white,
                         height: MediaQuery.of(context).size.height * .5,
                         padding: const EdgeInsets.all(20),
-                        child: Column(
+                        child: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Row(
-                              children: const <Widget>[
+                              children: <Widget>[
                                 InfoPopupWidget(
                                   contentTitle: infoPopupLongTextExampleText,
                                   child: Icon(
