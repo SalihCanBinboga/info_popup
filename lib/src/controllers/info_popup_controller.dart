@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:info_popup/info_popup.dart';
 
 import '../painters/arrow_indicator_painter.dart';
-import '../themes/high_light_theme.dart';
 
 part '../overlays/overlay_entry_layout.dart';
 
@@ -110,7 +109,7 @@ class InfoPopupController {
           contentOffset: contentOffset,
           indicatorOffset: indicatorOffset,
           enableHighlight: enableHighlight,
-          highlightTheme: HighLightTheme.defaultTheme(),
+          highlightTheme: highLightTheme,
           dismissTriggerBehavior: dismissTriggerBehavior,
           contentMaxWidth: contentMaxWidth,
           hideOverlay: dismissInfoPopup,
