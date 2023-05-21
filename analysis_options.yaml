@@ -1,7 +1,4 @@
 analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
   errors:
     # treat missing required parameters as a warning (not a hint)
     missing_required_param: warning
@@ -27,6 +24,9 @@ analyzer:
     - 'lib/src/generated/*.dart'
     - '**/*.mocks.dart' # Mockito @GenerateMocks
     - '**/*.pigeon.dart' # Pigeon generated file
+  language:
+    strict-casts: true
+    strict-raw-types: true
 
 linter:
   rules:

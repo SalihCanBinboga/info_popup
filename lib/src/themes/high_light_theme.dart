@@ -8,7 +8,10 @@ class HighLightTheme {
     required this.radius,
     required this.padding,
     required this.backgroundColor,
-  });
+  }) : assert(
+          backgroundColor != Colors.transparent,
+          'The backgroundColor can not be transparent.',
+        );
 
   /// Default [HighLightTheme].
   factory HighLightTheme.defaultTheme() => HighLightTheme(
