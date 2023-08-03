@@ -1,3 +1,7 @@
+## 3.0.5
+
+- chore: Update package topics.
+
 ## 3.0.4
 
 - fix: Highlight theme usable in `InfoPopupWidget` now
