@@ -10,19 +10,10 @@ screenshots:
     path: assets/readme/package_profile.webp
 topics:
   - popup
-  - info
-  - info popup
-  - show info
-  - show popup
   - modal
   - dialog
   - alert
-  - overlay
-  - alert dialog
   - tooltip
-  - popover
-  - lightbox
-
 
 
 environment:
