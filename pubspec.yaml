@@ -1,5 +1,6 @@
 name: info_popup
 description: The simple way to show the user some information on your selected widget.
+version: 3.0.5
 maintainer: Salih Can Binboga
 homepage: https://github.com/salihcanbinboga/info_popup
 repository: https://github.com/salihcanbinboga/info_popup
@@ -7,8 +8,22 @@ issue_tracker: https://github.com/salihcanbinboga/info_popup/issues
 screenshots:
   - description: "Info Popup Logo"
     path: assets/readme/package_profile.webp
+topics:
+  - popup
+  - info
+  - info popup
+  - show info
+  - show popup
+  - modal
+  - dialog
+  - alert
+  - overlay
+  - alert dialog
+  - tooltip
+  - popover
+  - lightbox
 
-version: 3.0.4
+
 
 environment:
   sdk: '>=2.18.4 <4.0.0'
