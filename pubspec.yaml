@@ -1,6 +1,6 @@
 name: info_popup
 description: The simple way to show the user some information on your selected widget.
-version: 3.0.5
+version: 3.0.6
 maintainer: Salih Can Binboga
 homepage: https://github.com/salihcanbinboga/info_popup
 repository: https://github.com/salihcanbinboga/info_popup
@@ -14,7 +14,6 @@ topics:
   - dialog
   - alert
   - tooltip
-
 
 environment:
   sdk: '>=2.18.4 <4.0.0'

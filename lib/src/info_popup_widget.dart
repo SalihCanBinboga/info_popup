@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:info_popup/info_popup.dart';
 
-
 /// A widget that shows a popup with text.
 class InfoPopupWidget extends StatefulWidget {
   /// Creates a [InfoPopupWidget] widget.

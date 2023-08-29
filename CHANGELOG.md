@@ -1,3 +1,7 @@
+## 3.0.6
+
+- refactor: Reformat code
+
 ## 3.0.5
 
 - chore: Update package topics.
