@@ -49,7 +49,7 @@ class InfoPopupController {
   final String? contentTitle;
 
   /// The [customContent] is the widget that will be custom shown in the popup.
-  final Widget? customContent;
+  final Widget? Function()? customContent;
 
   /// The [areaBackgroundColor] is the background color of the area that
   final Color areaBackgroundColor;
@@ -160,5 +160,14 @@ class InfoPopupController {
   void updateInfoPopupTargetRenderBox(RenderBox renderBox) {
     _targetRenderBox = renderBox;
     _infoPopupOverlayEntry?.markNeedsBuild();
+  }
+
+  /// [updateContent] is used to update the custom content of the popup.
+  void updateContent() {
+    Future<void>.microtask(
+      () {
+        _infoPopupOverlayEntry?.markNeedsBuild();
+      },
+    );
   }
 }

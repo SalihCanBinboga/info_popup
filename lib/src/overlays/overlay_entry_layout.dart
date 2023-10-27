@@ -17,7 +17,7 @@ class OverlayInfoPopup extends StatefulWidget {
     required bool enableHighlight,
     required HighLightTheme highlightTheme,
     required VoidCallback hideOverlay,
-    Widget? customContent,
+    Widget? Function()? customContent,
     String? contentTitle,
     double? contentMaxWidth,
     super.key,
@@ -40,7 +40,7 @@ class OverlayInfoPopup extends StatefulWidget {
 
   final LayerLink _layerLink;
   final RenderBox _targetRenderBox;
-  final Widget? _customContent;
+  final Widget? Function()? _customContent;
   final String? _contentTitle;
   final Color _areaBackgroundColor;
   final InfoPopupArrowTheme _indicatorTheme;
@@ -74,6 +74,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   }
 
   bool _isPointListenerDisposed = false;
+
   void _handlePointerEvent(PointerEvent event) {
     if (!mounted) {
       return;
@@ -424,12 +425,14 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                               ? null
                               : widget._contentTheme.contentPadding,
                           child: SingleChildScrollView(
-                            child: widget._customContent ??
-                                Text(
-                                  widget._contentTitle ?? '',
-                                  style: widget._contentTheme.infoTextStyle,
-                                  textAlign: widget._contentTheme.infoTextAlign,
-                                ),
+                            child: widget._customContent == null
+                                ? Text(
+                                    widget._contentTitle ?? '',
+                                    style: widget._contentTheme.infoTextStyle,
+                                    textAlign:
+                                        widget._contentTheme.infoTextAlign,
+                                  )
+                                : widget._customContent!(),
                           ),
                         ),
                       ),

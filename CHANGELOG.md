@@ -1,3 +1,17 @@
+## 4.0.0
+
+- fix: Issue where InfoPopupWidget was not updating when a state inside it changed, whether it was active or closed, has been resolved.
+- fix: Problem of closing when clicked while active on top of InfoPopupWidget and automatically reopening has been fixed.
+
+#### Breaking Change: 
+The customContent prop should now be a function that returns a Widget instead of directly accepting a Widget.
+
+Previous usage: `customContent: Widget`
+
+New usage: `customContent: () => Widget`
+
+This change means that the `customContent` prop must now be a function, requiring adjustments in the existing codebase.
+
 ## 3.0.6
 
 - refactor: Reformat code
