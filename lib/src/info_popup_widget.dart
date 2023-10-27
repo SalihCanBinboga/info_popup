@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -43,7 +42,7 @@ class InfoPopupWidget extends StatefulWidget {
   final String? contentTitle;
 
   /// The [customContent] is the widget that will be custom shown in the popup.
-  final Widget? customContent;
+  final Widget? Function()? customContent;
 
   /// The [areaBackgroundColor] is the background color of the area that
   final Color? areaBackgroundColor;
@@ -118,108 +117,27 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
   }
 
   @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(
-      DiagnosticsProperty<Widget>(
-        'child',
-        widget.child,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<String>(
-        'contentTitle',
-        widget.contentTitle,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<Widget>(
-        'customContent',
-        widget.customContent,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<Color>(
-        'areaBackgroundColor',
-        widget.areaBackgroundColor,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<InfoPopupArrowTheme>(
-        'arrowTheme',
-        widget.arrowTheme,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<InfoPopupContentTheme>(
-        'contentTheme',
-        widget.contentTheme,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<PopupDismissTriggerBehavior>(
-        'dismissTriggerBehavior',
-        widget.dismissTriggerBehavior,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<Offset>(
-        'contentOffset',
-        widget.contentOffset,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<Offset>(
-        'indicatorOffset',
-        widget.indicatorOffset,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<double>(
-        'contentMaxWidth',
-        widget.contentMaxWidth,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<bool>(
-        'enableHighlight',
-        widget.enableHighlight,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<HighLightTheme>(
-        'highLightTheme',
-        widget.highLightTheme,
-      ),
-    );
-
-    super.debugFillProperties(properties);
-  }
-
-  @override
   void didUpdateWidget(InfoPopupWidget oldWidget) {
-    if (oldWidget.customContent != widget.customContent) {
-      if (widget.enableLog && kDebugMode) {
-        print('Info Popup: You have changed the custom content. '
-            'Please restart the app to see the changes.');
+    if (widget.customContent != null && _infoPopupController != null) {
+      _infoPopupController!.updateContent();
+    } else if (oldWidget.contentTitle != widget.contentTitle ||
+        oldWidget.areaBackgroundColor != widget.areaBackgroundColor ||
+        oldWidget.arrowTheme != widget.arrowTheme ||
+        oldWidget.contentTheme != widget.contentTheme ||
+        oldWidget.contentOffset != widget.contentOffset ||
+        oldWidget.indicatorOffset != widget.indicatorOffset ||
+        oldWidget.contentMaxWidth != widget.contentMaxWidth ||
+        oldWidget.enableHighlight != widget.enableHighlight ||
+        oldWidget.highLightTheme != widget.highLightTheme ||
+        oldWidget.dismissTriggerBehavior != widget.dismissTriggerBehavior) {
+      if (_infoPopupController != null || _isControllerInitialized) {
+        _infoPopupController!.dismissInfoPopup();
+        _infoPopupController = null;
+        _isControllerInitialized = false;
       }
-    } else {
-      if (oldWidget.contentTitle != widget.contentTitle ||
-          oldWidget.areaBackgroundColor != widget.areaBackgroundColor ||
-          oldWidget.arrowTheme != widget.arrowTheme ||
-          oldWidget.contentTheme != widget.contentTheme ||
-          oldWidget.contentOffset != widget.contentOffset ||
-          oldWidget.indicatorOffset != widget.indicatorOffset ||
-          oldWidget.contentMaxWidth != widget.contentMaxWidth ||
-          oldWidget.enableHighlight != widget.enableHighlight ||
-          oldWidget.highLightTheme != widget.highLightTheme) {
-        if (_infoPopupController != null || _isControllerInitialized) {
-          _infoPopupController!.dismissInfoPopup();
-          _infoPopupController = null;
-          _isControllerInitialized = false;
-        }
-        setState(() {});
-      }
+      setState(() {});
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -243,12 +161,15 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
         }
       },
       child: GestureDetector(
-        onTap: () {
-          if (_infoPopupController != null &&
-              !_infoPopupController!.isShowing) {
-            _infoPopupController!.show();
-          }
-        },
+        // ignore: use_if_null_to_convert_nulls_to_bools
+        onTap: _infoPopupController?.isShowing == true
+            ? null
+            : () {
+                if (_infoPopupController != null &&
+                    !_infoPopupController!.isShowing) {
+                  _infoPopupController!.show();
+                }
+              },
         behavior: HitTestBehavior.translucent,
         child: CompositedTransformTarget(
           link: _layerLink,
@@ -285,9 +206,17 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
       arrowTheme: widget.arrowTheme ?? const InfoPopupArrowTheme(),
       contentTheme: widget.contentTheme ?? const InfoPopupContentTheme(),
       onAreaPressed: widget.onAreaPressed,
-      onLayoutMounted: widget.onLayoutMounted,
+      onLayoutMounted: (Size size) {
+        setState(() {
+          widget.onLayoutMounted?.call(size);
+        });
+      },
       dismissTriggerBehavior: widget.dismissTriggerBehavior,
-      infoPopupDismissed: widget.infoPopupDismissed,
+      infoPopupDismissed: () {
+        setState(() {
+          widget.infoPopupDismissed?.call();
+        });
+      },
       contentOffset: widget.contentOffset ?? const Offset(0, 0),
       indicatorOffset: widget.indicatorOffset ?? const Offset(0, 0),
       contentMaxWidth: widget.contentMaxWidth,
