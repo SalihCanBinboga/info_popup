@@ -1,3 +1,7 @@
+## 4.1.0
+
+- feat: Added click behaviour to `InfoPopupWidget` (default: `PopupClickTriggerBehavior.onTap`)
+
 ## 4.0.0
 
 - fix: Issue where InfoPopupWidget was not updating when a state inside it changed, whether it was active or closed, has been resolved.

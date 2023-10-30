@@ -19,6 +19,7 @@ class InfoPopupWidget extends StatefulWidget {
     this.onAreaPressed,
     this.onLayoutMounted,
     this.dismissTriggerBehavior = PopupDismissTriggerBehavior.onTapArea,
+    this.popupClickTriggerBehavior = PopupClickTriggerBehavior.onTap,
     this.contentOffset,
     this.indicatorOffset,
     this.contentMaxWidth,
@@ -61,6 +62,9 @@ class InfoPopupWidget extends StatefulWidget {
 
   /// The [dismissTriggerBehavior] is the showing behavior of the popup.
   final PopupDismissTriggerBehavior dismissTriggerBehavior;
+
+  /// The [popupClickTriggerBehavior] is the click behavior of the popup.
+  final PopupClickTriggerBehavior popupClickTriggerBehavior;
 
   /// The [contentOffset] is the offset of the content..
   final Offset? contentOffset;
@@ -161,15 +165,8 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
         }
       },
       child: GestureDetector(
-        // ignore: use_if_null_to_convert_nulls_to_bools
-        onTap: _infoPopupController?.isShowing == true
-            ? null
-            : () {
-                if (_infoPopupController != null &&
-                    !_infoPopupController!.isShowing) {
-                  _infoPopupController!.show();
-                }
-              },
+        onTap: _behaviour(),
+        onLongPressEnd: _onLongPressEnd,
         behavior: HitTestBehavior.translucent,
         child: CompositedTransformTarget(
           link: _layerLink,
@@ -180,6 +177,23 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
         ),
       ),
     );
+  }
+
+  Function()? _behaviour() {
+    // ignore: use_if_null_to_convert_nulls_to_bools
+    if (_infoPopupController?.isShowing == true) {
+      return null;
+    }
+
+    if (widget.popupClickTriggerBehavior == PopupClickTriggerBehavior.none) {
+      return null;
+    }
+
+    return () {
+      if (_infoPopupController != null && !_infoPopupController!.isShowing) {
+        _infoPopupController!.show();
+      }
+    };
   }
 
   Future<void> _updateRenderBox() async {
@@ -231,5 +245,18 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
     _infoPopupController!.updateInfoPopupTargetRenderBox(renderBox);
 
     _isControllerInitialized = true;
+  }
+
+  Function? _onLongPressEnd(LongPressEndDetails details) {
+    if (widget.popupClickTriggerBehavior !=
+        PopupClickTriggerBehavior.onLongPress) {
+      return null;
+    }
+
+    return () {
+      if (_infoPopupController != null && !_infoPopupController!.isShowing) {
+        _infoPopupController!.show();
+      }
+    };
   }
 }
