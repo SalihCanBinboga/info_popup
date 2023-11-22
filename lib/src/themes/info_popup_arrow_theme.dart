@@ -14,6 +14,7 @@ class InfoPopupArrowTheme {
     this.arrowDirection = ArrowDirection.up,
     this.color = Colors.black,
     this.arrowPainter,
+    this.enabledAutoArrowDirection = true,
   });
 
   /// The size [arrowSize] of the arrow indicator.
@@ -27,6 +28,9 @@ class InfoPopupArrowTheme {
 
   /// The [arrowPainter] is used to draw the arrow indicator.
   final CustomPainter? arrowPainter;
+
+  /// The [enabledAutoArrowDirection] is used to enable the auto arrow direction.
+  final bool enabledAutoArrowDirection;
 
   /// [copyWith] is used to copy the [InfoPopupArrowTheme] with new values.
   InfoPopupArrowTheme copyWith({
