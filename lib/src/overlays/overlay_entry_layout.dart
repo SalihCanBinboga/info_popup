@@ -477,6 +477,10 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                           return content;
                         }
 
+                        if (_contentMaxHeight < 0) {
+                          return content;
+                        }
+
                         return ConstrainedBox(
                           constraints: BoxConstraints(
                             maxWidth: _contentMaxWidth,

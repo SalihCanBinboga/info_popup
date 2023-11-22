@@ -1,3 +1,7 @@
+## 4.3.1
+
+- fix: The BoxConstraints error was addressed by adding extra validation.
+
 ## 4.3.0
 
 - feat: Added a structure that prevents other gestures when the showroom is active.
