@@ -1,3 +1,9 @@
+## 4.3.0
+
+- feat: Added a structure that prevents other gestures when the showroom is active.
+- feat: You can now disable the content constraints using the [enabledAutomaticConstraint] parameter. (default: true)
+- feat: Arrow direction now adjusts automatically. You can manage it using the [enabledAutoArrowDirection] parameter. (default: true)
+
 ## 4.1.0
 
 - feat: Added click behaviour to `InfoPopupWidget` (default: `PopupClickTriggerBehavior.onTap`)
