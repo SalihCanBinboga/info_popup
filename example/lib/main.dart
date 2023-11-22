@@ -44,137 +44,139 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Align(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            const InfoPopupWidget(
-              arrowTheme: InfoPopupArrowTheme(
-                arrowDirection: ArrowDirection.down,
-                color: Colors.pink,
-              ),
-              contentTitle: infoPopupTextExampleText,
-              child: Text('Info Popup Info Text Example'),
-            ),
-            const SizedBox(height: 30),
-            InfoPopupWidget(
-              arrowTheme: const InfoPopupArrowTheme(
-                color: Colors.black87,
-                arrowDirection: ArrowDirection.down,
-              ),
-              customContent: () => Container(
-                width: context.screenWidth * .8,
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey,
-                  borderRadius: BorderRadius.circular(10),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const InfoPopupWidget(
+                arrowTheme: InfoPopupArrowTheme(
+                  arrowDirection: ArrowDirection.down,
+                  color: Colors.pink,
                 ),
-                padding: const EdgeInsets.all(10),
-                child: const Column(
-                  children: <Widget>[
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Enter your name',
-                        hintStyle: TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Center(
-                      child: Text(
-                        infoPopupCustomExampleText,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
+                contentTitle: infoPopupTextExampleText,
+                child: Text('Info Popup Info Text Example'),
+              ),
+              const SizedBox(height: 30),
+              InfoPopupWidget(
+                arrowTheme: const InfoPopupArrowTheme(
+                  color: Colors.black87,
+                  arrowDirection: ArrowDirection.down,
                 ),
-              ),
-              child: const Text('Info Popup Custom Widget Example'),
-            ),
-            const SizedBox(height: 30),
-            const InfoPopupWidget(
-              arrowTheme: InfoPopupArrowTheme(
-                color: Colors.pink,
-              ),
-              contentTitle: infoPopupLongTextExampleText,
-              child: Text('Info Popup Long Info Text Example'),
-            ),
-            const SizedBox(height: 30),
-            GestureDetector(
-              onTap: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (_) {
-                    return Container(
-                      color: Colors.white,
-                      height: MediaQuery.of(context).size.height * .5,
-                      padding: const EdgeInsets.all(20),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              InfoPopupWidget(
-                                contentTitle: infoPopupLongTextExampleText,
-                                child: Icon(
-                                  Icons.info,
-                                  color: Colors.pink,
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              Text('Info Popup Inside Bottom Sheet Example'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-              behavior: HitTestBehavior.translucent,
-              child: const Text('Bottom Sheet Inside Example'),
-            ),
-            const SizedBox(height: 30),
-            const InfoPopupWidget(
-              contentTitle: 'Info Popup Icon Examplee',
-              arrowTheme: InfoPopupArrowTheme(
-                color: Colors.pink,
-              ),
-              child: Icon(
-                Icons.info,
-                color: Colors.pink,
-              ),
-            ),
-            const SizedBox(height: 30),
-            const InfoPopupWidget(
-              contentOffset: Offset(0, 30),
-              contentTitle: infoPopupArrowGapExampleText,
-              child: Text('Info Popup Arrow Gap Example'),
-            ),
-            const SizedBox(height: 30),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push<void>(
-                  MaterialPageRoute<void>(
-                    builder: (_) {
-                      return const ListExample();
-                    },
+                customContent: () => Container(
+                  width: context.screenWidth * .8,
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                );
-              },
-              behavior: HitTestBehavior.translucent,
-              child: const Text('List Example'),
-            ),
-            const SizedBox(height: 30),
-            const InfoPopupWidget(
-              enableHighlight: true,
-              contentTitle: 'This is a HighLighted Info Popup',
-              child: Text('HighLighted Info Popup Example'),
-            ),
-          ],
+                  padding: const EdgeInsets.all(10),
+                  child: const Column(
+                    children: <Widget>[
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Enter your name',
+                          hintStyle: TextStyle(color: Colors.white),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Center(
+                        child: Text(
+                          infoPopupCustomExampleText,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                child: const Text('Info Popup Custom Widget Example'),
+              ),
+              const SizedBox(height: 30),
+              const InfoPopupWidget(
+                arrowTheme: InfoPopupArrowTheme(
+                  color: Colors.pink,
+                ),
+                contentTitle: infoPopupLongTextExampleText,
+                child: Text('Info Popup Long Info Text Example'),
+              ),
+              const SizedBox(height: 30),
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    builder: (_) {
+                      return Container(
+                        color: Colors.white,
+                        height: MediaQuery.of(context).size.height * .5,
+                        padding: const EdgeInsets.all(20),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                InfoPopupWidget(
+                                  contentTitle: infoPopupLongTextExampleText,
+                                  child: Icon(
+                                    Icons.info,
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Text('Info Popup Inside Bottom Sheet Example'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                behavior: HitTestBehavior.translucent,
+                child: const Text('Bottom Sheet Inside Example'),
+              ),
+              const SizedBox(height: 30),
+              const InfoPopupWidget(
+                contentTitle: 'Info Popup Icon Examplee',
+                arrowTheme: InfoPopupArrowTheme(
+                  color: Colors.pink,
+                ),
+                child: Icon(
+                  Icons.info,
+                  color: Colors.pink,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const InfoPopupWidget(
+                contentOffset: Offset(0, 30),
+                contentTitle: infoPopupArrowGapExampleText,
+                child: Text('Info Popup Arrow Gap Example'),
+              ),
+              const SizedBox(height: 30),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push<void>(
+                    MaterialPageRoute<void>(
+                      builder: (_) {
+                        return const ListExample();
+                      },
+                    ),
+                  );
+                },
+                behavior: HitTestBehavior.translucent,
+                child: const Text('List Example'),
+              ),
+              const SizedBox(height: 30),
+              const InfoPopupWidget(
+                enableHighlight: true,
+                contentTitle: 'This is a HighLighted Info Popup',
+                child: Text('HighLighted Info Popup Example'),
+              ),
+            ],
+          ),
         ),
       ),
     );
