@@ -26,6 +26,7 @@ class InfoPopupWidget extends StatefulWidget {
     this.enableHighlight = false,
     this.highLightTheme,
     this.enableLog = false,
+    this.enabledAutomaticConstraint = true,
     super.key,
   }) : assert(customContent == null || contentTitle == null,
             'You can not use both customContent and contentTitle at the same time.');
@@ -90,6 +91,10 @@ class InfoPopupWidget extends StatefulWidget {
   /// The [highLightTheme] is the theme of the highlight. Can customize the
   /// highlight border radius and the padding.
   final HighLightTheme? highLightTheme;
+
+  /// The [enabledAutomaticConstraint] is the boolean value that indicates
+  /// whether the popup will be constrained automatically or not.
+  final bool enabledAutomaticConstraint;
 
   @override
   State<InfoPopupWidget> createState() => _InfoPopupWidgetState();
@@ -220,6 +225,7 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
       arrowTheme: widget.arrowTheme ?? const InfoPopupArrowTheme(),
       contentTheme: widget.contentTheme ?? const InfoPopupContentTheme(),
       onAreaPressed: widget.onAreaPressed,
+      enabledAutomaticConstraint: widget.enabledAutomaticConstraint,
       onLayoutMounted: (Size size) {
         setState(() {
           widget.onLayoutMounted?.call(size);

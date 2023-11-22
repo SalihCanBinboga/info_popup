@@ -23,6 +23,7 @@ class InfoPopupController {
     required this.dismissTriggerBehavior,
     required this.enableHighlight,
     required this.highLightTheme,
+    required this.enabledAutomaticConstraint,
     this.infoPopupDismissed,
     this.contentTitle,
     this.customContent,
@@ -94,6 +95,10 @@ class InfoPopupController {
   /// highlight border radius and the padding.
   final HighLightTheme highLightTheme;
 
+  /// The [enabledAutomaticConstraint] is the boolean value that indicates
+  /// whether the popup will be constrained automatically or not.
+  final bool enabledAutomaticConstraint;
+
   /// The [show] method is used to show the popup.
   void show() {
     _infoPopupOverlayEntry = OverlayEntry(
@@ -112,6 +117,7 @@ class InfoPopupController {
           highlightTheme: highLightTheme,
           dismissTriggerBehavior: dismissTriggerBehavior,
           contentMaxWidth: contentMaxWidth,
+          enabledAutomaticConstraint: enabledAutomaticConstraint,
           hideOverlay: dismissInfoPopup,
           onLayoutMounted: (Size size) {
             Future<void>.delayed(

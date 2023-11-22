@@ -17,6 +17,7 @@ class OverlayInfoPopup extends StatefulWidget {
     required bool enableHighlight,
     required HighLightTheme highlightTheme,
     required VoidCallback hideOverlay,
+    required bool enabledAutomaticConstraint,
     Widget? Function()? customContent,
     String? contentTitle,
     double? contentMaxWidth,
@@ -36,6 +37,7 @@ class OverlayInfoPopup extends StatefulWidget {
         _contentMaxWidth = contentMaxWidth,
         _enableHighlight = enableHighlight,
         _highLightTheme = highlightTheme,
+        _enabledAutomaticConstraint = enabledAutomaticConstraint,
         _hideOverlay = hideOverlay;
 
   final LayerLink _layerLink;
@@ -54,6 +56,7 @@ class OverlayInfoPopup extends StatefulWidget {
   final bool _enableHighlight;
   final HighLightTheme _highLightTheme;
   final VoidCallback _hideOverlay;
+  final bool _enabledAutomaticConstraint;
 
   @override
   State<OverlayInfoPopup> createState() => _OverlayInfoPopupState();
@@ -138,9 +141,19 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     super.dispose();
   }
 
+  ArrowDirection? _overridenArrowDirection;
+
+  ArrowDirection get arrowDirection {
+    if (_overridenArrowDirection != null) {
+      return _overridenArrowDirection!;
+    }
+
+    return widget._indicatorTheme.arrowDirection;
+  }
+
   Offset get _indicatorOffset {
     final double indicatorWidth = widget._indicatorTheme.arrowSize.width;
-    switch (widget._indicatorTheme.arrowDirection) {
+    switch (arrowDirection) {
       case ArrowDirection.up:
         return Offset(
               _targetWidgetRect.width / 2 - indicatorWidth / 2,
@@ -165,7 +178,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
       highlightVerticalGap = widget._highLightTheme.padding.bottom;
     }
 
-    switch (widget._indicatorTheme.arrowDirection) {
+    switch (arrowDirection) {
       case ArrowDirection.up:
         return Offset(0, highlightVerticalGap);
       case ArrowDirection.down:
@@ -182,7 +195,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     final double targetHeight = _targetWidgetRect.height;
     final double contentDxCenter = targetWidth / 2 - contentWidth / 2;
 
-    switch (widget._indicatorTheme.arrowDirection) {
+    switch (arrowDirection) {
       case ArrowDirection.up:
         targetCenterOffset = Offset(
           contentDxCenter,
@@ -225,12 +238,14 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   @override
   void didUpdateWidget(covariant OverlayInfoPopup oldWidget) {
     _updateContentLayoutSize();
+    _contentMaxHeight;
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void didChangeDependencies() {
     _updateContentLayoutSize();
+    _contentMaxHeight;
     super.didChangeDependencies();
   }
 
@@ -243,6 +258,10 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
           const Duration(milliseconds: 50),
           () {
             if (!mounted) {
+              return;
+            }
+
+            if (_bodyKey.currentContext == null) {
               return;
             }
 
@@ -300,18 +319,40 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     final double bottomPadding = context.mediaQuery.padding.bottom;
     final double topPadding = context.mediaQuery.padding.top;
     final double targetWidgetTopPosition = _targetWidgetRect.top;
+    final double contentHeight = _contentSize?.height ?? 0;
+    final bool isArrowDirectionOverriden = _overridenArrowDirection != null;
 
-    switch (widget._indicatorTheme.arrowDirection) {
+    switch (arrowDirection) {
       case ArrowDirection.up:
         final double belowSpace = screenHeight -
             targetWidgetTopPosition -
             _targetWidgetRect.height -
             padding -
             bottomPadding;
-        return belowSpace;
+
+        if (!widget._indicatorTheme.enabledAutoArrowDirection) {
+          return belowSpace;
+        }
+
+        if ((belowSpace - contentHeight) > 0 || isArrowDirectionOverriden) {
+          return belowSpace;
+        } else {
+          _setIndicatorDirection(ArrowDirection.down);
+          return 0;
+        }
       case ArrowDirection.down:
         final double aboveSpace = targetWidgetTopPosition - topPadding;
-        return aboveSpace;
+
+        if (!widget._indicatorTheme.enabledAutoArrowDirection) {
+          return aboveSpace;
+        }
+
+        if ((aboveSpace - contentHeight) > 0 || isArrowDirectionOverriden) {
+          return aboveSpace;
+        } else {
+          _setIndicatorDirection(ArrowDirection.up);
+          return 0;
+        }
     }
   }
 
@@ -340,6 +381,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
   @override
   Widget build(BuildContext context) {
+    _contentMaxHeight;
     return ClipPath(
       clipper: widget._enableHighlight
           ? _HighLighter(
@@ -385,8 +427,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                         size: widget._indicatorTheme.arrowSize,
                         painter: widget._indicatorTheme.arrowPainter ??
                             ArrowIndicatorPainter(
-                              arrowDirection:
-                                  widget._indicatorTheme.arrowDirection,
+                              arrowDirection: arrowDirection,
                               arrowColor: widget._indicatorTheme.color,
                             ),
                       ),
@@ -400,12 +441,8 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                       scale: _isLayoutMounted ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 50),
                       alignment: Alignment.topCenter,
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: _contentMaxWidth,
-                          maxHeight: _contentMaxHeight,
-                        ),
-                        child: Container(
+                      child: Builder(builder: (BuildContext context) {
+                        final Container content = Container(
                           key: _bodyKey,
                           decoration: widget._customContent != null
                               ? null
@@ -434,8 +471,20 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                                   )
                                 : widget._customContent!(),
                           ),
-                        ),
-                      ),
+                        );
+
+                        if (!widget._enabledAutomaticConstraint) {
+                          return content;
+                        }
+
+                        return ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: _contentMaxWidth,
+                            maxHeight: _contentMaxHeight,
+                          ),
+                          child: content,
+                        );
+                      }),
                     ),
                   )
                 ],
@@ -445,5 +494,15 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
         ),
       ),
     );
+  }
+
+  void _setIndicatorDirection(ArrowDirection newDirection) {
+    if (!widget._indicatorTheme.enabledAutoArrowDirection) {
+      return;
+    }
+
+    setState(() {
+      _overridenArrowDirection = newDirection;
+    });
   }
 }
