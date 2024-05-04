@@ -94,15 +94,20 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
       return;
     }
 
-    final RenderBox? renderBox =
-        _bodyKey.currentContext!.findRenderObject() as RenderBox?;
+    final BuildContext? bodyContext = _bodyKey.currentContext;
 
-    if (renderBox == null) {
+    if (bodyContext == null) {
+      return;
+    }
+
+    final RenderBox? bodyRenderBox = bodyContext.findRenderObject() as RenderBox?;
+
+    if (bodyRenderBox == null) {
       return;
     }
 
     final Offset clickPosition = event.position;
-    final Offset contentPosition = renderBox.localToGlobal(Offset.zero);
+    final Offset contentPosition = bodyRenderBox.localToGlobal(Offset.zero);
 
     switch (widget._dismissTriggerBehavior) {
       case PopupDismissTriggerBehavior.onTapContent:
@@ -372,6 +377,10 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
   }
 
   Offset get _targetOffset {
+    if (!widget._targetRenderBox.attached) {
+      return Offset.zero;
+    }
+
     return widget._targetRenderBox.localToGlobal(Offset.zero);
   }
 

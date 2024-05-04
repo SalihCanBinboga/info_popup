@@ -1,0 +1,17 @@
+name: Close Stale Pull Requests
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run every day at midnight
+
+jobs:
+  close_stale_prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close Stale Issues
+        uses: actions/stale@v9.0.0
+        with:
+          stale-issue-message: 'This issue has been automatically closed due to inactivity. Please feel free to reopen it if you are still experiencing this problem.'
+          days-before-stale: 7
+          days-before-close: 3
+          stale-issue-label: 'stale'
