@@ -1,3 +1,7 @@
+## 4.3.2
+
+- chore: Update package icon on pub.dev
+
 ## 4.3.1
 
 - fix: The BoxConstraints error was addressed by adding extra validation.
