@@ -42,6 +42,8 @@ class InfoPopupPage extends StatefulWidget {
 class _InfoPopupPageState extends State<InfoPopupPage> {
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.sizeOf(context);
+
     return Scaffold(
       body: Align(
         child: SingleChildScrollView(
@@ -63,7 +65,7 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                   arrowDirection: ArrowDirection.down,
                 ),
                 customContent: () => Container(
-                  width: context.screenWidth * .8,
+                  width: size.width * .8,
                   decoration: BoxDecoration(
                     color: Colors.blueGrey,
                     borderRadius: BorderRadius.circular(10),
