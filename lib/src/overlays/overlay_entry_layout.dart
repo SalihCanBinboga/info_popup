@@ -100,7 +100,8 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
       return;
     }
 
-    final RenderBox? bodyRenderBox = bodyContext.findRenderObject() as RenderBox?;
+    final RenderBox? bodyRenderBox =
+        bodyContext.findRenderObject() as RenderBox?;
 
     if (bodyRenderBox == null) {
       return;
